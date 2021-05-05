@@ -1,19 +1,21 @@
 ;; TODO
-;; - customizable format
-;; - test
+;; [x] - customizable format
 ;; - some format support
-;; - compatible with some packages
+;; - test
+;; - compatible with some packages(eww, w3m, magit-forge)
+;; - without a argument
+;; - scrape title
 
 ;; ex.
 ;; <a href="https://ja.wikipedia.org/wiki/Emacs">Emacs - Wikipedia</a>
 
 (defgroup create-link nil
-  "Generate a well-formed link"
+  "Generate a formatted current page link."
   :group 'convenience
   :prefix "create-link-")
 
 (defcustom create-link-default-format 'html
-  "Default format"
+  "Default link format."
   :group 'create-link
   :type '(choice (const :tag "html" html)
                  (const :tag "markdown" markdown)
