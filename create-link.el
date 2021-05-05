@@ -20,46 +20,47 @@
                  (other :tag "org" org)
                  (other :tag "media-wiki" media-wiki)))
 
-;; url → text
+;; format keywords:
+;; %url%
+;; %title%
+
 (defcustom create-link-format-html
-  "<a href='%s'>%s</a>"
+"<a href='%url%'>%title%</a>"
   "html")
 
-;; 順番が違うのでフォーマット文字列で指定できるようにする必要がある。どうしたらよいのだろう。
-;; text → url
 (defcustom create-link-format-markdown
-  "[%s](%s)"
+  "[%title%](%url%)"
   "markdown")
 
 (defcustom create-link-format-org
-  "[[%s][%s]]"
+  "[[%url%][%title%]]"
   "org")
 
 (defcustom create-link-format-media-wiki
-  "[%s %s]"
+  "[%url% %title%]"
   "media-wiki")
 
-(defun create-link-execute (format-type url title)
-  (message "Copied %s" (format format-type url title))
-  (kill-new (format format-type url title)))
+(defun create-link-make-format ()
+  (replace-regexp-in-string "%title%"
+                            (plist-get eww-data :title)
+                            (replace-regexp-in-string "%url%"
+                                                      (plist-get eww-data :url)
+                                                      create-link-format-markdown)))
 
-;; formatが順番に依存してる
+(defun create-link-execute (format-type)
+    (message "Copied %s" (create-link-make-format))
+    (kill-new (create-link-make-format)))
+
 (defun create-link ()
   (interactive)
-  (let ((url (plist-get eww-data :url))
-        (title (plist-get eww-data :title)))
-    (pcase create-link-default-format
-      (`html
-       (create-link-execute create-link-format-html url title))
-      (`markdown
-       (create-link-execute create-link-format-markdown title link)) ; 逆
-      (`org
-       (create-link-execute create-link-format-org url title))
-      (`media-wiki
-       (create-link-execute create-link-format-media-wiki url title))
-      ))
+  (pcase create-link-default-format
+    (`html
+     (create-link-execute create-link-format-html))
+    (`markdown
+     (create-link-execute create-link-format-markdown))
+    (`org
+     (create-link-execute create-link-format-org))
+    (`media-wiki
+     (create-link-execute create-link-format-media-wiki))
+    )
   )
-
-;; (defun title-link-w3m ()
-;;   (interactive)
-;; )
