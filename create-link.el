@@ -43,11 +43,11 @@
   "media-wiki")
 
 (defun create-link-make-format (title url)
-  (replace-regexp-in-string "%title%"
-                            title
-                            (replace-regexp-in-string "%url%"
-                                                      url
-                                                      create-link-format-markdown)))
+  (replace-regexp-in-string
+   "%title%"
+   title
+   (replace-regexp-in-string
+    "%url%" url create-link-format-markdown)))
 
 (defun create-link-browser ()
   (cond ((string-match-p "w3m" (buffer-name))
