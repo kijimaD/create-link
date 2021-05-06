@@ -59,13 +59,15 @@
    "%title%"
    title
    (replace-regexp-in-string
-    "%url%" url (create-link-raw-format))))
+    "%url%"
+    url
+    (create-link-raw-format))))
 
 (defun create-link-browser ()
-  (cond ((string-match-p "w3m" (buffer-name))
-         (create-link-make-format w3m-current-title w3m-current-url))
-        ((string-match-p "eww" (buffer-name))
+  (cond ((string-match-p "eww" (buffer-name))
          (create-link-make-format (plist-get eww-data :title) (plist-get eww-data :url)))
+        ((string-match-p "w3m" (buffer-name))
+         (create-link-make-format w3m-current-title w3m-current-url))
         (t (message "Can't create link!"))))
 
 (defun create-link ()
