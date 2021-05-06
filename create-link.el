@@ -42,16 +42,23 @@
   "[%url% %title%]"
   "media-wiki")
 
-(defun create-link-make-format ()
+(defun create-link-make-format (title url)
   (replace-regexp-in-string "%title%"
-                            (plist-get eww-data :title)
+                            title
                             (replace-regexp-in-string "%url%"
-                                                      (plist-get eww-data :url)
+                                                      url
                                                       create-link-format-markdown)))
 
+(defun create-link-browser ()
+  (cond ((string-match-p "w3m" (buffer-name))
+         (create-link-make-format w3m-current-title w3m-current-url))
+        ((string-match-p "eww" (buffer-name))
+         (create-link-make-format (plist-get eww-data :title) (plist-get eww-data :url)))
+        (t (message "Can't create link!"))))
+
 (defun create-link-execute (format-type)
-    (message "Copied %s" (create-link-make-format))
-    (kill-new (create-link-make-format)))
+    (message "Copied! %s" (create-link-browser))
+    (kill-new (create-link-browser)))
 
 (defun create-link ()
   (interactive)
