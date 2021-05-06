@@ -42,27 +42,35 @@
   "[%url% %title%]"
   "media-wiki")
 
-(defun create-link-make-format ()
-  (replace-regexp-in-string "%title%"
-                            (plist-get eww-data :title)
-                            (replace-regexp-in-string "%url%"
-                                                      (plist-get eww-data :url)
-                                                      create-link-format-markdown)))
+(defun create-link-raw-format ()
+  (pcase create-link-default-format
+    (`html
+     create-link-format-html)
+    (`markdown
+     create-link-format-markdown)
+    (`org
+     create-link-format-org)
+    (`media-wiki
+     create-link-format-media-wiki)
+    ))
 
-(defun create-link-execute (format-type)
-    (message "Copied %s" (create-link-make-format))
-    (kill-new (create-link-make-format)))
+(defun create-link-make-format (title url)
+  (replace-regexp-in-string
+   "%title%"
+   title
+   (replace-regexp-in-string
+    "%url%"
+    url
+    (create-link-raw-format))))
+
+(defun create-link-browser ()
+  (cond ((string-match-p "eww" (buffer-name))
+         (create-link-make-format (plist-get eww-data :title) (plist-get eww-data :url)))
+        ((string-match-p "w3m" (buffer-name))
+         (create-link-make-format w3m-current-title w3m-current-url))
+        (t (message "Can't create link!"))))
 
 (defun create-link ()
   (interactive)
-  (pcase create-link-default-format
-    (`html
-     (create-link-execute create-link-format-html))
-    (`markdown
-     (create-link-execute create-link-format-markdown))
-    (`org
-     (create-link-execute create-link-format-org))
-    (`media-wiki
-     (create-link-execute create-link-format-media-wiki))
-    )
-  )
+    (message "Copied! %s" (create-link-browser))
+    (kill-new (create-link-browser)))
