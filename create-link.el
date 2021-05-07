@@ -1,10 +1,11 @@
-;;; create-link.el --- Formatted link generator package for Emacs.
+;;; create-link.el --- Formatted link generator in browser
 
 ;; Copyright (C) 2021 Kijima Daigo
 ;; Created date 2021-05-07 00:30 +0900
 
 ;; Author: Kijima Daigo <norimaking777@gmail.com>
 ;; Version: 1.0.0
+;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: link format browser convenience
 ;; URL: https://github.com/kijimaD/create-link
 
@@ -80,8 +81,7 @@
     (`org
      create-link-format-org)
     (`media-wiki
-     create-link-format-media-wiki)
-    ))
+     create-link-format-media-wiki)))
 
 (defun create-link-replace-dictionary ()
   "Convert format keyword to corresponding one."
@@ -116,6 +116,6 @@
   (message "Copied! %s" (create-link-make-format))
   (kill-new (create-link-make-format)))
 
-(provide 'crate-link)
+(provide 'create-link)
 
 ;;; create-link.el ends here
