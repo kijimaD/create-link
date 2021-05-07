@@ -3,7 +3,7 @@
 
 Formatted link generator package for Emacs.
 
-ex. Open the [FSF site](https://www.fsf.org/) on with eww. Run `create-link` to get a well-formed link(↓Markdown).
+ex. Open the [FSF site](https://www.fsf.org/) on with eww. `M-x create-link` to get a well-formed link(↓Markdown).
 
 `[Front Page — Free Software Foundation — working together for free software](https://www.fsf.org/)`
 ![Screenshot_2021-05-07_23-29-22](https://user-images.githubusercontent.com/11595790/117464910-1656c680-af8c-11eb-9b9b-c53d65e6f1ea.png)
