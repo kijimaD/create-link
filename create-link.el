@@ -26,9 +26,8 @@
 ;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
-;; Creat formatted url on current page.
+;; Creat formatted url on current buffer(w3m, eww).
 ;; M-x create-link
-;; ex. https://www.fsf.org/ => [Front Page — Free Software Foundation — working together for free software](https://www.fsf.org/)
 
 ;;; Code:
 
