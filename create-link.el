@@ -73,30 +73,32 @@
      create-link-format-media-wiki)
     ))
 
-(defun create-link-make-format (title url)
+(defun create-link-make-format ()
   "Fill format keywords."
   (replace-regexp-in-string
    "%title%"
-   title
+   (cdr (assoc 'title (create-link-browser)))
    (replace-regexp-in-string
     "%url%"
-    url
+    (cdr (assoc 'url (create-link-browser)))
     (create-link-raw-format))))
 
 (defun create-link-browser ()
   "Get keyword information(ex. link) on your browser."
   (cond ((string-match-p "eww" (buffer-name))
-         (create-link-make-format (plist-get eww-data :title) (plist-get eww-data :url)))
+         `((title . ,(plist-get eww-data :title))
+           (url . ,(plist-get eww-data :url))))
         ((string-match-p "w3m" (buffer-name))
-         (create-link-make-format w3m-current-title w3m-current-url))
+         `((title . ,w3m-current-title)
+           (url . ,w3m-current-url)))
         (t (message "Can't create link!"))))
 
 ;;;###autoload
 (defun create-link ()
   "Create formatted link."
   (interactive)
-    (message "Copied! %s" (create-link-browser))
-    (kill-new (create-link-browser)))
+  (message "Copied! %s" (create-link-make-format))
+  (kill-new (create-link-make-format)))
 
 (provide 'crate-link)
 
