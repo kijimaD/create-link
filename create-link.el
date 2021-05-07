@@ -45,8 +45,8 @@
                  (other :tag "media-wiki" media-wiki)))
 
 ;; Format keywords:
-;; %url%
-;; %title%
+;; %url% - http://www.google.com/
+;; %title% - Google
 (defcustom create-link-format-html "<a href='%url%'>%title%</a>"
   "HTML link format.")
 
@@ -54,13 +54,13 @@
   "Markdown link format.")
 
 (defcustom create-link-format-org "[[%url%][%title%]]"
-  "Org-mode link format")
+  "Org-mode link format.")
 
 (defcustom create-link-format-media-wiki "[%url% %title%]"
-  "Media Wiki link format")
+  "Media Wiki link format.")
 
 (defun create-link-raw-format ()
-  "Choose a format type by the custom variable"
+  "Choose a format type by the custom variable."
   (pcase create-link-default-format
     (`html
      create-link-format-html)
@@ -89,7 +89,7 @@
    (create-link-raw-format)))
 
 (defun create-link-get-information ()
-  "Get keyword information(ex. link) on your browser."
+  "Get keyword information on your browser."
   (cond ((string-match-p "eww" (buffer-name))
          `((title . ,(plist-get eww-data :title))
            (url . ,(plist-get eww-data :url))))
