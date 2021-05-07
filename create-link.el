@@ -60,7 +60,7 @@
   "Media Wiki link format")
 
 (defun create-link-raw-format ()
-  "Output default format string."
+  "Choose a format type by the custom variable"
   (pcase create-link-default-format
     (`html
      create-link-format-html)
@@ -72,15 +72,21 @@
      create-link-format-media-wiki)
     ))
 
+(defun create-link-replace-dictionary ()
+  "Convert format keyword to corresponding one."
+  `(("%url%" . ,(cdr (assoc 'url (create-link-browser))))
+    ("%title%" . ,(cdr (assoc 'title (create-link-browser))))))
+
 (defun create-link-make-format ()
   "Fill format keywords."
-  (replace-regexp-in-string
-   "%title%"
-   (cdr (assoc 'title (create-link-browser)))
-   (replace-regexp-in-string
-    "%url%"
-    (cdr (assoc 'url (create-link-browser)))
-    (create-link-raw-format))))
+  (seq-reduce
+   (lambda (string regexp-replacement-pair)
+     (replace-regexp-in-string
+      (car regexp-replacement-pair)
+      (cdr regexp-replacement-pair)
+      string))
+   (create-link-replace-dictionary)
+   (create-link-raw-format)))
 
 (defun create-link-browser ()
   "Get keyword information(ex. link) on your browser."
