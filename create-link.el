@@ -31,6 +31,9 @@
 
 ;;; Code:
 
+(require 'eww)
+(require 'w3m)
+
 (defgroup create-link nil
   "Generate a formatted current page link."
   :group 'convenience
@@ -48,16 +51,24 @@
 ;; %url% - http://www.google.com/
 ;; %title% - Google
 (defcustom create-link-format-html "<a href='%url%'>%title%</a>"
-  "HTML link format.")
+  "HTML link format."
+  :group 'create-link
+  :type 'string)
 
 (defcustom create-link-format-markdown "[%title%](%url%)"
-  "Markdown link format.")
+  "Markdown link format."
+  :group 'create-link
+  :type 'string)
 
 (defcustom create-link-format-org "[[%url%][%title%]]"
-  "Org-mode link format.")
+  "Org-mode link format."
+  :group 'create-link
+  :type 'string)
 
 (defcustom create-link-format-media-wiki "[%url% %title%]"
-  "Media Wiki link format.")
+  "Media Wiki link format."
+  :group 'create-link
+  :type 'string)
 
 (defun create-link-raw-format ()
   "Choose a format type by the custom variable."
