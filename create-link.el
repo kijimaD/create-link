@@ -74,8 +74,8 @@
 
 (defun create-link-replace-dictionary ()
   "Convert format keyword to corresponding one."
-  `(("%url%" . ,(cdr (assoc 'url (create-link-browser))))
-    ("%title%" . ,(cdr (assoc 'title (create-link-browser))))))
+  `(("%url%" . ,(cdr (assoc 'url (create-link-get-information))))
+    ("%title%" . ,(cdr (assoc 'title (create-link-get-information))))))
 
 (defun create-link-make-format ()
   "Fill format keywords."
@@ -88,7 +88,7 @@
    (create-link-replace-dictionary)
    (create-link-raw-format)))
 
-(defun create-link-browser ()
+(defun create-link-get-information ()
   "Get keyword information(ex. link) on your browser."
   (cond ((string-match-p "eww" (buffer-name))
          `((title . ,(plist-get eww-data :title))
