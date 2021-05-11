@@ -46,7 +46,8 @@
   :type '(choice (const :tag "html" html)
                  (const :tag "markdown" markdown)
                  (other :tag "org" org)
-                 (other :tag "media-wiki" media-wiki)))
+                 (other :tag "media-wiki" media-wiki)
+		 (other :tag "latex" latex)))
 
 ;; Format keywords:
 ;; %url% - http://www.google.com/
@@ -71,6 +72,11 @@
   :group 'create-link
   :type 'string)
 
+(defcustom create-link-format-latex "\\href{%url%}{%title%}"
+  "Latex link format."
+  :group 'create-link
+  :type 'string)
+
 (defun create-link-raw-format ()
   "Choose a format type by the custom variable."
   (pcase create-link-default-format
@@ -81,7 +87,9 @@
     (`org
      create-link-format-org)
     (`media-wiki
-     create-link-format-media-wiki)))
+     create-link-format-media-wiki)
+    (`latex
+     create-link-format-latex)))
 
 (defun create-link-replace-dictionary ()
   "Convert format keyword to corresponding one."
@@ -107,7 +115,10 @@
         ((string-match-p "w3m" (buffer-name))
          `((title . ,w3m-current-title)
            (url . ,w3m-current-url)))
-        (t (message "Can't create link!"))))
+	;; otherwise, create-link to the file-buffer
+        (t
+	 `((title . ,(buffer-name))
+	   (url . ,(buffer-file-name))))))
 
 ;;;###autoload
 (defun create-link ()
