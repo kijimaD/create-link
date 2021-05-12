@@ -19,7 +19,9 @@ ex. Open the [FSF site](https://www.fsf.org/) on with eww. `M-x create-link` to 
 - LaTeX
 - Markdown
 - MediaWiki
-- Org
+- Org-mode
+
+If you want to add formatting, [this commit](https://github.com/kijimaD/create-link/pull/7/commits/b5d27ca13f42f8938c184ddf0ba93f4c252c13fa) may be helpful!
 
 ## Customize
 
