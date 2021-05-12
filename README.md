@@ -15,10 +15,11 @@ ex. Open the [FSF site](https://www.fsf.org/) on with eww. `M-x create-link` to 
 
 ## Output Format
 
-- html(default)
-- markdown
-- media-wiki
-- org
+- HTML(default)
+- LaTeX
+- Markdown
+- MediaWiki
+- Org
 
 ## Customize
 
@@ -28,5 +29,6 @@ To change the output format:
 ```
 
 ## Notes
+
 I wanted to use this↓ useful Chrome extension in Emacs too, so I made it.
 - [ku/CreateLink](https://github.com/ku/CreateLink)([Chrome Web Store](https://chrome.google.com/webstore/detail/create-link/gcmghdmnkfdbncmnmlkkglmnnhagajbm))
