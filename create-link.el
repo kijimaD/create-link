@@ -47,7 +47,7 @@
                  (const :tag "markdown" markdown)
                  (other :tag "org" org)
                  (other :tag "media-wiki" media-wiki)
-		 (other :tag "latex" latex)))
+	         (other :tag "latex" latex)))
 
 ;; Format keywords:
 ;; %url% - http://www.google.com/
