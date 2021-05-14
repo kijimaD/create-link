@@ -47,7 +47,7 @@
                  (const :tag "markdown" markdown)
                  (other :tag "org" org)
                  (other :tag "media-wiki" media-wiki)
-		 (other :tag "latex" latex)))
+	         (other :tag "latex" latex)))
 
 ;; Format keywords:
 ;; %url% - http://www.google.com/
@@ -77,6 +77,20 @@
   :group 'create-link
   :type 'string)
 
+(defcustom create-link-filter-title-regexp "<.*>"
+  "Filter title regexp.
+Replace all matches for `create-link-filter-title-regexp' with
+`create-link-filter-title-replace'."
+  :group 'create-link
+  :type 'regexp)
+
+(defcustom create-link-filter-title-replace ""
+  "Filter title replace.
+Replace all matches for `create-link-filter-title-regexp' with
+`create-link-filter-title-replace'."
+  :group 'create-link
+  :type 'string)
+
 (defun create-link-raw-format ()
   "Choose a format type by the custom variable."
   (pcase create-link-default-format
@@ -92,9 +106,24 @@
      create-link-format-latex)))
 
 (defun create-link-replace-dictionary ()
-  "Convert format keyword to corresponding one."
-  `(("%url%" . ,(cdr (assoc 'url (create-link-get-information))))
-    ("%title%" . ,(cdr (assoc 'title (create-link-get-information))))))
+  "Convert format keyword to corresponding one.
+If there is a selected region, fill title with the region."
+  (cond ((region-active-p)
+         (deactivate-mark t)
+         `(("%url%" . ,(cdr (assoc 'url (create-link-get-information))))
+           ("%title%" . ,(buffer-substring-no-properties (region-beginning) (region-end)))))
+        (t
+         `(("%url%" . ,(cdr (assoc 'url (create-link-get-information))))
+           ("%title%" . ,(create-link-filter-title))))))
+
+(defun create-link-filter-title ()
+  "Filter title information.
+Replace all matches for`create-link-filter-title-regexp' with
+`create-link-filter-title-replace'."
+  (replace-regexp-in-string
+   create-link-filter-title-regexp
+   create-link-filter-title-replace
+   (cdr (assoc 'title (create-link-get-information)))))
 
 (defun create-link-make-format ()
   "Fill format keywords."
@@ -122,7 +151,8 @@
 
 ;;;###autoload
 (defun create-link ()
-  "Create formatted link."
+  "Create formatted link.
+If there is a selected region, fill title with the region."
   (interactive)
   (message "Copied! %s" (create-link-make-format))
   (kill-new (create-link-make-format)))
