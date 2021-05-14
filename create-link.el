@@ -77,6 +77,20 @@
   :group 'create-link
   :type 'string)
 
+(defcustom create-link-filter-title-regexp "<.*>"
+  "Filter title regexp.
+Replace all matches for `create-link-filter-title-regexp' with
+`create-link-filter-title-replace'."
+  :group 'create-link
+  :type 'regexp)
+
+(defcustom create-link-filter-title-replace ""
+  "Filter title replace.
+Replace all matches for `create-link-filter-title-regexp' with
+`create-link-filter-title-replace'."
+  :group 'create-link
+  :type 'string)
+
 (defun create-link-raw-format ()
   "Choose a format type by the custom variable."
   (pcase create-link-default-format
