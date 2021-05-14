@@ -140,7 +140,7 @@ Replace all matches for`create-link-filter-title-regexp' with
   "Get keyword information on your browser."
   (cond ((string-match-p "eww" (buffer-name))
          `((title . ,(plist-get eww-data :title))
-           (url . ,(plist-get eww-data :url))))
+           (url . ,(eww-current-url))))
         ((string-match-p "w3m" (buffer-name))
          `((title . ,w3m-current-title)
            (url . ,w3m-current-url)))
