@@ -114,7 +114,16 @@ If there is a selected region, fill title with the region."
            ("%title%" . ,(buffer-substring-no-properties (region-beginning) (region-end)))))
         (t
          `(("%url%" . ,(cdr (assoc 'url (create-link-get-information))))
-           ("%title%" . ,(cdr (assoc 'title (create-link-get-information))))))))
+           ("%title%" . ,(create-link-filter-title))))))
+
+(defun create-link-filter-title ()
+  "Filter title information.
+Replace all matches for`create-link-filter-title-regexp' with
+`create-link-filter-title-replace'."
+  (replace-regexp-in-string
+   create-link-filter-title-regexp
+   create-link-filter-title-replace
+   (cdr (assoc 'title (create-link-get-information)))))
 
 (defun create-link-make-format ()
   "Fill format keywords."
