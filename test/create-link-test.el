@@ -51,16 +51,18 @@
     (delete-file file)))
 
 (ert-deftest create-link-make-format-filter-test ()
-  (custom-set-variables
-   '(create-link-filter-title-regexp "l."))
-  (find-file "fixture")
-  (rename-buffer "title")
+  (let ((file "file")
+        (buffer "buffer"))
+    (custom-set-variables
+     '(create-link-filter-title-regexp ".er"))
+    (find-file file)
+    (rename-buffer buffer)
 
-  (should (string-match-p
-           (format "<a href='.*/fixture'>tit</a>") ; 'title' -> 'tit'
-           (create-link-make-format)))
-  (custom-set-variables
-   '(create-link-filter-title-regexp "<.*>")))
+    (should (string-match-p
+             (format "<a href='.*/file'>buf</a>") ; 'buffer' -> 'buf'
+             (create-link-make-format)))
+    (custom-set-variables
+     '(create-link-filter-title-regexp "<.*>"))))
 
 (provide 'create-link-test)
 
