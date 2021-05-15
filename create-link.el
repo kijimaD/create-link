@@ -42,9 +42,10 @@
   :group 'create-link
   :type '(choice (const :tag "html" html)
                  (const :tag "markdown" markdown)
-                 (other :tag "org" org)
-                 (other :tag "media-wiki" media-wiki)
-	         (other :tag "latex" latex)))
+                 (const :tag "org" org)
+                 (const :tag "doku-wiki" doku-wiki)
+                 (const :tag "media-wiki" media-wiki)
+	         (const :tag "latex" latex)))
 
 ;; Format keywords:
 ;; %url% - http://www.google.com/
@@ -64,8 +65,13 @@
   :group 'create-link
   :type 'string)
 
+(defcustom create-link-format-doku-wiki "[[%url%|%title%]]"
+  "DokuWiki link format."
+  :group 'create-link
+  :type 'string)
+
 (defcustom create-link-format-media-wiki "[%url% %title%]"
-  "Media Wiki link format."
+  "MediaWiki link format."
   :group 'create-link
   :type 'string)
 
@@ -97,6 +103,8 @@ Replace all matches for `create-link-filter-title-regexp' with
      create-link-format-markdown)
     (`org
      create-link-format-org)
+    (`doku-wiki
+     create-link-format-doku-wiki)
     (`media-wiki
      create-link-format-media-wiki)
     (`latex
