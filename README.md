@@ -20,6 +20,7 @@ ex. Open the [FSF site](https://www.fsf.org/) on with eww. `M-x create-link` to 
 - HTML(default)
 - LaTeX
 - Markdown
+- DokuWiki
 - MediaWiki
 - Org-mode
 
