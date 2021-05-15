@@ -32,8 +32,6 @@
 
 ;;; Code:
 
-(require 'eww)
-
 (defgroup create-link nil
   "Generate a formatted current page link."
   :group 'convenience
@@ -138,8 +136,9 @@ Replace all matches for`create-link-filter-title-regexp' with
 (defun create-link-get-information ()
   "Get keyword information on your browser."
   (cond ((string-match-p "eww" (buffer-name))
-         `((title . ,(plist-get eww-data :title))
-           (url . ,(eww-current-url))))
+         (if (require 'eww nil 'noerror)
+             `((title . ,(plist-get eww-data :title))
+               (url . ,(eww-current-url)))))
         ((string-match-p "w3m" (buffer-name))
          (if (require 'w3m nil 'noerror)
              `((title . ,(w3m-current-title))
