@@ -1,8 +1,8 @@
 ;;; create-link-test.el --- Tests for create-link
 
 (require 'ert)
+(require 'w3m)
 (require 'create-link)
-(require 'eww)
 
 ;;; Code:
 

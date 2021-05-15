@@ -3,4 +3,4 @@
 (source melpa)
 
 ;; Install packages
-(depends-on "eww")
+(depends-on "w3m")
