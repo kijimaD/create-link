@@ -34,3 +34,9 @@ jobs:
       with:
         file: create-link.el
         ignore_warnings: ${{ matrix.ignore_warnings }}
+    - uses: leotaku/elisp-check@master
+      with:
+        check: melpa
+        file: '*.el'
+        ignore_warnings: false
+        warnings_as_errors: false
