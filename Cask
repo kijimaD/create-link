@@ -2,5 +2,8 @@
 (source gnu)
 (source melpa)
 
-;; Install packages
-(depends-on "w3m")
+(package-file "create-link.el")
+
+(development
+        (depends-on "ert")
+        (depends-on "w3m"))
