@@ -6,6 +6,9 @@
 
 ;;; Code:
 
+;; Useful debug information
+(message "Running tests on Emacs %s" emacs-version)
+
 (ert-deftest create-link-make-format-eww-test ()
   "Each buffer can make format."
   ;; eww
