@@ -32,7 +32,7 @@ jobs:
       run: ./test-startup.sh
     - uses: leotaku/elisp-check@master
       with:
-        file: '*.el'
+        file: create-link.el
         ignore_warnings: ${{ matrix.ignore_warnings }}
     - uses: leotaku/elisp-check@master
       with:
