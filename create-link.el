@@ -33,7 +33,6 @@
 ;;; Code:
 
 (require 'eww)
-(require 'w3m)
 
 (defgroup create-link nil
   "Generate a formatted current page link."
@@ -142,8 +141,9 @@ Replace all matches for`create-link-filter-title-regexp' with
          `((title . ,(plist-get eww-data :title))
            (url . ,(eww-current-url))))
         ((string-match-p "w3m" (buffer-name))
-         `((title . ,w3m-current-title)
-           (url . ,w3m-current-url)))
+         (if (require 'w3m nil 'noerror)
+             `((title . ,(w3m-current-title))
+               (url . ,w3m-current-url))))
 	;; otherwise, create-link to the file-buffer
         (t
 	 `((title . ,(buffer-name))
