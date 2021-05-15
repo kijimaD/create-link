@@ -31,28 +31,40 @@
   ;; file
   (let ((buffer "buffer")
         (file "file"))
-    (switch-to-buffer buffer)
-    (write-file file)
+    (find-file file)
     (should (string-match-p
              (format "<a href='.*/" file "'>" buffer "</a>")
-             (create-link-make-format)))
-    (delete-file file)))
+             (create-link-make-format)))))
 
 (ert-deftest create-link-make-format-context-test ()
   "Each context can make format."
-  (let ((buffer "buffer")
-        (file "file")
+  (let ((file "file")
         (content "content"))
-    (switch-to-buffer buffer)
+    (find-file file)
     (insert content)
-    (beginning-of-buffer)
+    (goto-char (point-min))
     (mark-word)
-    (write-file file)
 
     (should (string-match-p
              (format "<a href='.*/" file "'>" content "</a>")
              (create-link-make-format)))
     (delete-file file)))
+
+(ert-deftest create-link-make-format-filter-test ()
+  (let ((file "file")
+        (buffer "buffer"))
+    (custom-set-variables
+     '(create-link-filter-title-regexp ".er")
+     '(create-link-filter-title-replace ""))
+    (find-file file)
+    (rename-buffer buffer)
+
+    (should (string-match-p
+             (format "<a href='.*/file'>buf</a>") ; 'buffer' -> 'buf'
+             (create-link-make-format)))
+    (custom-set-variables
+     '(create-link-filter-title-regexp "<.*>")
+     '(create-link-filter-title-replace ""))))
 
 (provide 'create-link-test)
 
