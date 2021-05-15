@@ -26,6 +26,8 @@ jobs:
     - uses: purcell/setup-emacs@master
       with:
         version: ${{ matrix.emacs_version }}
+    - name: Install w3m
+      run: sudo apt-get install w3m
     - name: Cask test
       run: ./test-startup.sh
     - uses: leotaku/elisp-check@master
