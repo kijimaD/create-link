@@ -26,10 +26,8 @@ jobs:
     - uses: purcell/setup-emacs@master
       with:
         version: ${{ matrix.emacs_version }}
-    - name: Cask setup
+    - name: Cask test
       run: ./test-startup.sh
-    - name: Test with cask
-      run: cask exec emacs -Q -batch -L . -l create-link-test.el -f ert-run-tests-batch-and-exit
     - uses: leotaku/elisp-check@master
       with:
         file: create-link.el
