@@ -156,6 +156,18 @@ Replace all matches for`create-link-filter-title-regexp' with
 	 `((title . ,(buffer-name))
 	   (url . ,(buffer-file-name))))))
 
+(defun create-link-from-url ()
+  "Get title from current point url."
+  (request (thing-at-point-url-at-point)
+    :parser 'buffer-string
+    :complete (function*
+               (lambda (&key data &allow-other-keys)
+                 (switch-to-buffer "*request-result*")
+                 (insert data)
+                 (string-match "<title>\\(.*\\)</title>" (buffer-string))
+                 (kill-new (match-string 1 (buffer-string)))
+                 (kill-buffer)))))
+
 ;;;###autoload
 (defun create-link ()
   "Create formatted link.
