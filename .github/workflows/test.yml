@@ -28,3 +28,7 @@ jobs:
       with:
         file: create-link.el
         ignore_warnings: ${{ matrix.ignore_warnings }}
+    - uses: leotaku/elisp-check@master
+      with:
+        check: ert
+        file: create-link-test.el
