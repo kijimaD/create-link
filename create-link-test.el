@@ -2,6 +2,7 @@
 
 (require 'ert)
 (require 'create-link)
+(require 'eww)
 
 ;;; Code:
 
