@@ -54,7 +54,8 @@
   (let ((file "file")
         (buffer "buffer"))
     (custom-set-variables
-     '(create-link-filter-title-regexp ".er"))
+     '(create-link-filter-title-regexp ".er")
+     '(create-link-filter-title-replace ""))
     (find-file file)
     (rename-buffer buffer)
 
@@ -62,7 +63,8 @@
              (format "<a href='.*/file'>buf</a>") ; 'buffer' -> 'buf'
              (create-link-make-format)))
     (custom-set-variables
-     '(create-link-filter-title-regexp "<.*>"))))
+     '(create-link-filter-title-regexp "<.*>")
+     '(create-link-filter-title-replace ""))))
 
 (provide 'create-link-test)
 
