@@ -12,7 +12,7 @@
   (eww "google.com")
   (sit-for 2)
   (should (string-match-p
-           (format "<a href='.*google.com.*'>Google</a>")
+           (format "<a href='.*google.com.*'>.*Google.*</a>")
            (create-link-make-format))))
 
 (ert-deftest create-link-make-format-w3m-test ()
@@ -20,7 +20,7 @@
   (w3m-goto-url "google.com")
   (sit-for 2)
   (should (string-match-p
-           (format "<a href='.*google.com.*'>Google</a>")
+           (format "<a href='.*google.com.*'>.*Google.*</a>")
            (create-link-make-format))))
 
 (ert-deftest create-link-make-format-file-test ()
