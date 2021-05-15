@@ -3,8 +3,6 @@ name: test
 on:
   pull_request:
   push:
-    branches:
-      - main
 
 jobs:
   test-mixed:
@@ -33,7 +31,7 @@ jobs:
         version: ${{ matrix.emacs_version }}
     - uses: ./
       with:
-        file: elisp-check.el
+        file: create-link-test.el
         check: ${{ matrix.check }}
         ignore_warnings: ${{ matrix.ignore_warnings }}
   test-builtin:
