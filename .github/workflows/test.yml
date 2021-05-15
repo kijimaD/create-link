@@ -1,0 +1,64 @@
+name: test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  test-mixed:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        emacs_version:
+          - 26.2
+          - 26.3
+          - 27.1
+          - snapshot
+        ignore_warnings:
+          - true
+        check:
+          - melpa
+          - package-lint
+        include:
+          - emacs_version: snapshot
+            check: melpa
+            ignore_warnings: false
+    steps:
+    - uses: actions/checkout@v2
+    - uses: purcell/setup-emacs@master
+      with:
+        version: ${{ matrix.emacs_version }}
+    - uses: ./
+      with:
+        file: elisp-check.el
+        check: ${{ matrix.check }}
+        ignore_warnings: ${{ matrix.ignore_warnings }}
+  test-builtin:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        emacs_version:
+          - 26.2
+          - 26.3
+          - 27.1
+          - snapshot
+        ignore_warnings:
+          - true
+        check:
+          - load-file
+          - byte-compile
+          - checkdoc
+    steps:
+    - uses: actions/checkout@v2
+    - uses: purcell/setup-emacs@master
+      with:
+        version: ${{ matrix.emacs_version }}
+    - uses: ./
+      with:
+        file: elisp-check.el
+        check: ${{ matrix.check }}
+        ignore_warnings: ${{ matrix.ignore_warnings }}
