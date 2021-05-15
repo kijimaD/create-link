@@ -47,7 +47,8 @@
 
     (should (string-match-p
              (format "<a href='.*/" file "'>" content "</a>")
-             (create-link-make-format)))))
+             (create-link-make-format)))
+    (delete-file file)))
 
 (ert-deftest create-link-make-format-filter-test ()
   (custom-set-variables
