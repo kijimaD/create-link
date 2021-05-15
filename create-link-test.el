@@ -10,13 +10,15 @@
   "Each buffer can make format."
   ;; eww
   (eww "google.com")
+  (sit-for 2)
   (should (string-match-p
-           (format "<a href='.*google.com.*'></a>") ;; TODO: eww can't generate title when testing.
+           (format "<a href='.*google.com.*'>Google</a>")
            (create-link-make-format))))
 
 (ert-deftest create-link-make-format-w3m-test ()
   ;; w3m
   (w3m-goto-url "google.com")
+  (sit-for 2)
   (should (string-match-p
            (format "<a href='.*google.com.*'>Google</a>")
            (create-link-make-format))))
