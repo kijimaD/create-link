@@ -40,12 +40,11 @@
 
 (ert-deftest create-link-make-format-context-test ()
   "Each context can make format."
-  (let ((buffer "buffer")
-        (file "file")
+  (let ((file "file")
         (content "content"))
-    (switch-to-buffer buffer)
+    (switch-to-buffer file)
     (insert content)
-    (beginning-of-buffer)
+    (goto-char (point-min))
     (mark-word)
     (write-file file)
 
