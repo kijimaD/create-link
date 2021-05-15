@@ -5,20 +5,22 @@
 
 ;;; Code:
 
-(ert-deftest create-link-make-format-buffer-test ()
+(ert-deftest create-link-make-format-eww-test ()
   "Each buffer can make format."
   ;; eww
   (eww "google.com")
   (should (string-match-p
            (format "<a href='.*google.com.*'></a>") ;; TODO: eww can't generate title when testing.
-           (create-link-make-format)))
+           (create-link-make-format))))
 
+(ert-deftest create-link-make-format-w3m-test ()
   ;; w3m
   (w3m-goto-url "google.com")
   (should (string-match-p
            (format "<a href='.*google.com.*'>Google</a>")
-           (create-link-make-format)))
+           (create-link-make-format))))
 
+(ert-deftest create-link-make-format-file-test ()
   ;; file
   (let ((buffer "buffer")
         (file "file"))
