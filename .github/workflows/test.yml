@@ -26,13 +26,11 @@ jobs:
     - uses: purcell/setup-emacs@master
       with:
         version: ${{ matrix.emacs_version }}
-    - name: Install packages
+    - name: Cask setup
       run: ./test-startup.sh
+    - name: Test with cask
+      run: cask exec emacs -Q -batch -L . -l create-link-test.el -f ert-run-tests-batch-and-exit
     - uses: leotaku/elisp-check@master
       with:
         file: create-link.el
         ignore_warnings: ${{ matrix.ignore_warnings }}
-    - uses: leotaku/elisp-check@master
-      with:
-        check: ert
-        file: create-link-test.el
