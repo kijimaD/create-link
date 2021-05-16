@@ -136,7 +136,7 @@ Replace all matches for`create-link-filter-title-regexp' with
    create-link-filter-title-replace
    (cdr (assoc 'title (create-link-get-information)))))
 
-(defun create-link-make-format (&optional custom-format)
+(defun create-link-make-format (&optional format)
   "Fill format keywords."
   (seq-reduce
    (lambda (string regexp-replacement-pair)
@@ -145,7 +145,7 @@ Replace all matches for`create-link-filter-title-regexp' with
       (cdr regexp-replacement-pair)
       string))
    (create-link-replace-dictionary)
-   (if custom-format (eval custom-format)
+   (if format (eval format)
      (eval create-link-default-format))))
 
 (defun create-link-get-information ()
