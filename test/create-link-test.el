@@ -36,8 +36,8 @@
              (format "<a href='.*/" file "'>" buffer "</a>")
              (create-link-make-format)))))
 
-(ert-deftest create-link-make-format-context-test ()
-  "Each context can make format."
+(ert-deftest create-link-make-format-region-test ()
+  "If use region, fill title with region."
   (let ((file "file")
         (content "content"))
     (find-file file)
@@ -51,6 +51,7 @@
     (delete-file file)))
 
 (ert-deftest create-link-make-format-filter-test ()
+  "If set filter custom, it filter title."
   (let ((file "file")
         (buffer "buffer"))
     (custom-set-variables
