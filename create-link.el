@@ -41,15 +41,15 @@
   :group 'convenience
   :prefix "create-link-")
 
-(defcustom create-link-default-format 'html
+(defcustom create-link-default-format 'create-link-format-html
   "Default link format."
   :group 'create-link
-  :type '(choice (const :tag "html" html)
-                 (const :tag "markdown" markdown)
-                 (const :tag "org" org)
-                 (const :tag "doku-wiki" doku-wiki)
-                 (const :tag "media-wiki" media-wiki)
-	         (const :tag "latex" latex)))
+  :type '(choice (const create-link-format-html)
+                 (const create-link-format-markdown)
+                 (const create-link-format-org)
+                 (const create-link-format-doku-wiki)
+                 (const create-link-format-media-wiki)
+	         (const create-link-format-latex)))
 
 ;; Format keywords:
 ;; %url% - http://www.google.com/
@@ -99,22 +99,6 @@ Replace all matches for `create-link-filter-title-regexp' with
   :type 'string)
 
 (defvar create-link-scraped-title ""
-
-(defun create-link-raw-format ()
-  "Choose a format type by the custom variable."
-  (pcase create-link-default-format
-    (`html
-     create-link-format-html)
-    (`markdown
-     create-link-format-markdown)
-    (`org
-     create-link-format-org)
-    (`doku-wiki
-     create-link-format-doku-wiki)
-    (`media-wiki
-     create-link-format-media-wiki)
-    (`latex
-     create-link-format-latex)))
   "Variable to save scraped title.")
 
 (defun create-link-replace-dictionary ()
@@ -162,7 +146,7 @@ Replace all matches for`create-link-filter-title-regexp' with
       (cdr regexp-replacement-pair)
       string))
    (create-link-replace-dictionary)
-   (create-link-raw-format)))
+   (eval create-link-default-format)))
 
 (defun create-link-get-information ()
   "Get keyword information on your browser."
