@@ -44,12 +44,12 @@
 (defcustom create-link-default-format 'create-link-format-html
   "Default link format."
   :group 'create-link
-  :type '(choice (const create-link-format-html)
-                 (const create-link-format-markdown)
-                 (const create-link-format-org)
-                 (const create-link-format-doku-wiki)
-                 (const create-link-format-media-wiki)
-	         (const create-link-format-latex)))
+  :type '(choice (const :tag "HTML" create-link-format-html)
+                 (const :tag "Markdown" create-link-format-markdown)
+                 (const :tag "Org"  create-link-format-org)
+                 (const :tag "DokuWiki" create-link-format-doku-wiki)
+                 (const :tag "MediaWiki" create-link-format-media-wiki)
+	         (const :tag "LaTeX" create-link-format-latex)))
 
 ;; Format keywords:
 ;; %url% - http://www.google.com/
