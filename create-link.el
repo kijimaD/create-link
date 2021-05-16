@@ -170,7 +170,7 @@ Replace all matches for`create-link-filter-title-regexp' with
   "Get title from current point url."
     (request (thing-at-point-url-at-point)
       :parser 'buffer-string
-      :success (function*
+      :success (cl-function
                  (lambda (&key data &allow-other-keys)
                    (string-match "<title>\\(.*\\)</title>" data)
                    (setq create-link-scraped-title (match-string 1 data))
