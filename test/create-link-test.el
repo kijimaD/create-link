@@ -57,6 +57,7 @@
   (let ((file "file")
         (content "http://google.com"))
     (find-file file)
+    (erase-buffer)
     (insert content)
     (goto-char (point-min))
 
