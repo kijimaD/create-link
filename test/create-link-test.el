@@ -4,6 +4,7 @@
 (require 'ert)
 (require 'eww)
 (require 'w3m)
+(require 'cl-lib)
 
 ;;; Code:
 
