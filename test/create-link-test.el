@@ -34,7 +34,8 @@
     (find-file file)
     (should (string-match-p
              (format "<a href='.*/" file "'>" buffer "</a>")
-             (create-link-make-format)))))
+             (create-link-make-format)))
+    (delete-file file)))
 
 (ert-deftest create-link-make-format-region-test ()
   "If use region, fill title with region."
@@ -47,6 +48,19 @@
 
     (should (string-match-p
              (format "<a href='.*/" file "'>" content "</a>")
+             (create-link-make-format)))
+    (delete-file file)))
+
+(ert-deftest create-link-make-format-url-test ()
+  "If point on url, fill title with scraped title."
+  (let ((file "file")
+        (content "http://google.com"))
+    (find-file file)
+    (insert content)
+    (goto-char (point-min))
+
+    (should (string-match-p
+             (format "<a href='" content "'>.*Google.*</a>")
              (create-link-make-format)))
     (delete-file file)))
 
