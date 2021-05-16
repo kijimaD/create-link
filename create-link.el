@@ -99,7 +99,6 @@ Replace all matches for `create-link-filter-title-regexp' with
   :type 'string)
 
 (defvar create-link-scraped-title ""
-  "To save scraped title.")
 
 (defun create-link-raw-format ()
   "Choose a format type by the custom variable."
@@ -116,6 +115,7 @@ Replace all matches for `create-link-filter-title-regexp' with
      create-link-format-media-wiki)
     (`latex
      create-link-format-latex)))
+  "Variable to save scraped title.")
 
 (defun create-link-replace-dictionary ()
   "Convert format keyword to corresponding one.
