@@ -146,7 +146,7 @@ Replace all matches for`create-link-filter-title-regexp' with
       (cdr regexp-replacement-pair)
       string))
    (create-link-replace-dictionary)
-   (if custom-format custom-format
+   (if custom-format (eval custom-format)
      (eval create-link-default-format))))
 
 (defun create-link-get-information ()
@@ -163,6 +163,24 @@ Replace all matches for`create-link-filter-title-regexp' with
         (t
 	 `((title . ,(buffer-name))
 	   (url . ,(buffer-file-name))))))
+
+(defun create-link-format-source ()
+  '((name . "Select format")
+    (candidates . (create-link-format-latex
+                   create-link-format-media-wiki
+                   create-link-format-doku-wiki
+                   create-link-format-org
+                   create-link-format-markdown
+                   create-link-format-html))
+    (action . (lambda (candidate)
+                (message "Copied! %s" (create-link-make-format (intern candidate)))
+                (kill-new (create-link-make-format (intern-soft candidate)))))))
+
+;;;###autoload
+(defun create-link-manual ()
+  "Select format and create format."
+  (interactive)
+  (helm :sources (create-link-format-source)))
 
 ;;;###autoload
 (defun create-link ()
