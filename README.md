@@ -4,10 +4,13 @@
 
 Formatted link generator package for Emacs.
 
-ex. Open the [FSF site](https://www.fsf.org/) on with eww. `M-x create-link` to get a well-formed link(↓Markdown).
+e.g. Open [Google](https://google.com) on with `eww`. Then `M-x create-link` to get a formatted link(↓HTML).
 
-`[Front Page — Free Software Foundation — working together for free software](https://www.fsf.org/)`
-![Screenshot_2021-05-07_23-29-22](https://user-images.githubusercontent.com/11595790/117464910-1656c680-af8c-11eb-9b9b-c53d65e6f1ea.png)
+![eww-draw](https://user-images.githubusercontent.com/11595790/118385727-86c8ac00-b64c-11eb-9be7-724f3eaf2fdc.png)
+
+e.g. Point on URL `M-x create-link`, fill title with scraped one.
+
+![title-from-link-draw](https://user-images.githubusercontent.com/11595790/118385789-15d5c400-b64d-11eb-9380-2e6b786f41c3.png)
 
 ## 🌟Available buffer
 
