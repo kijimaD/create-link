@@ -164,16 +164,16 @@ Replace all matches for`create-link-filter-title-regexp' with
 	   (url . ,(buffer-file-name))))))
 
 (defun create-link-format-source ()
+  "Helm source for manual format selection."
   '((name . "Select format")
-    (candidates . (create-link-format-latex
-                   create-link-format-media-wiki
-                   create-link-format-doku-wiki
-                   create-link-format-org
+    (candidates . (create-link-format-html
                    create-link-format-markdown
-                   create-link-format-html))
+                   create-link-format-org
+                   create-link-format-doku-wiki
+                   create-link-format-media-wiki
+                   create-link-format-latex))
     (action . (lambda (candidate)
-                (message "Copied! %s" (create-link-make-format (intern candidate)))
-                (kill-new (create-link-make-format (intern-soft candidate)))))))
+                (create-link (intern candidate))))))
 
 ;;;###autoload
 (defun create-link-manual ()
@@ -182,12 +182,12 @@ Replace all matches for`create-link-filter-title-regexp' with
   (helm :sources (create-link-format-source)))
 
 ;;;###autoload
-(defun create-link ()
+(defun create-link (&optional format)
   "Create formatted link.
 If there is a selected region, fill title with the region."
   (interactive)
-  (message "Copied! %s" (create-link-make-format))
-  (kill-new (create-link-make-format)))
+  (message "Copied! %s" (create-link-make-format format))
+  (kill-new (create-link-make-format format)))
 
 (provide 'create-link)
 
