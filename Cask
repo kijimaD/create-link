@@ -8,4 +8,5 @@
         (depends-on "eww")
         (depends-on "ert")
         (depends-on "request")
-        (depends-on "w3m"))
+        (depends-on "w3m")
+        (depends-on "package-lint"))

@@ -30,7 +30,3 @@ jobs:
       run: sudo apt-get install w3m
     - name: Cask test
       run: ./test/test-startup.sh
-    - uses: leotaku/elisp-check@master
-      with:
-        file: create-link.el
-        ignore_warnings: ${{ matrix.ignore_warnings }}
