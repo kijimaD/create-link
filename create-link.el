@@ -119,7 +119,8 @@ Replace all matches for `create-link-filter-title-regexp' with
 
 (defun create-link-replace-dictionary ()
   "Convert format keyword to corresponding one.
-If there is a selected region, fill title with the region."
+If there is a selected region, fill title with the region.
+If point is on URL, fill title with scraped one."
   (cond ((region-active-p)
          (deactivate-mark t)
          `(("%url%" . ,(cdr (assoc 'url (create-link-get-information))))
@@ -130,6 +131,18 @@ If there is a selected region, fill title with the region."
         (t
          `(("%url%" . ,(cdr (assoc 'url (create-link-get-information))))
            ("%title%" . ,(create-link-filter-title))))))
+
+(defun create-link-from-url ()
+  "Get title from current point url."
+    (request (thing-at-point-url-at-point)
+      :parser 'buffer-string
+      :success (cl-function
+                 (lambda (&key data &allow-other-keys)
+                   (string-match "<title>\\(.*\\)</title>" data)
+                   (setq create-link-scraped-title (match-string 1 data))
+                   )))
+    (sit-for 1)
+    create-link-scraped-title)
 
 (defun create-link-filter-title ()
   "Filter title information.
@@ -165,18 +178,6 @@ Replace all matches for`create-link-filter-title-regexp' with
         (t
 	 `((title . ,(buffer-name))
 	   (url . ,(buffer-file-name))))))
-
-(defun create-link-from-url ()
-  "Get title from current point url."
-    (request (thing-at-point-url-at-point)
-      :parser 'buffer-string
-      :success (cl-function
-                 (lambda (&key data &allow-other-keys)
-                   (string-match "<title>\\(.*\\)</title>" data)
-                   (setq create-link-scraped-title (match-string 1 data))
-                   )))
-    (sit-for 1)
-    create-link-scraped-title)
 
 ;;;###autoload
 (defun create-link ()
