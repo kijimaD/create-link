@@ -137,7 +137,8 @@ Replace all matches for`create-link-filter-title-regexp' with
    (cdr (assoc 'title (create-link-get-information)))))
 
 (defun create-link-make-format (&optional format)
-  "Fill format keywords."
+  "Fill format keywords by FORMAT(optional).
+If FORMAT is not specified, use `create-link-default-format'"
   (seq-reduce
    (lambda (string regexp-replacement-pair)
      (replace-regexp-in-string
@@ -177,14 +178,16 @@ Replace all matches for`create-link-filter-title-regexp' with
 
 ;;;###autoload
 (defun create-link-manual ()
-  "Select format and create format."
+  "Manually select a format and generate a link.
+Version of function `create-link'."
   (interactive)
   (helm :sources (create-link-format-source)))
 
 ;;;###autoload
 (defun create-link (&optional format)
-  "Create formatted link.
-If there is a selected region, fill title with the region."
+  "Create format link.
+If an optional FORMAT is specified,
+it will be generated in that format."
   (interactive)
   (message "Copied! %s" (create-link-make-format format))
   (kill-new (create-link-make-format format)))
