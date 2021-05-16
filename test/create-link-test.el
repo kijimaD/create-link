@@ -1,9 +1,10 @@
 ;;; create-link-test.el --- Tests for create-link
 
+(require 'create-link)
 (require 'ert)
 (require 'eww)
 (require 'w3m)
-(require 'create-link)
+(require 'cl-lib)
 
 ;;; Code:
 
@@ -34,10 +35,11 @@
     (find-file file)
     (should (string-match-p
              (format "<a href='.*/" file "'>" buffer "</a>")
-             (create-link-make-format)))))
+             (create-link-make-format)))
+    (delete-file file)))
 
-(ert-deftest create-link-make-format-context-test ()
-  "Each context can make format."
+(ert-deftest create-link-make-format-region-test ()
+  "If use region, fill title with region."
   (let ((file "file")
         (content "content"))
     (find-file file)
@@ -50,7 +52,22 @@
              (create-link-make-format)))
     (delete-file file)))
 
+(ert-deftest create-link-make-format-url-test ()
+  "If point on url, fill title with scraped title."
+  (let ((file "file")
+        (content "http://google.com"))
+    (find-file file)
+    (erase-buffer)
+    (insert content)
+    (goto-char (point-min))
+
+    (should (string-match-p
+             (format "<a href='" content "'>.*Google.*</a>")
+             (create-link-make-format)))
+    (delete-file file)))
+
 (ert-deftest create-link-make-format-filter-test ()
+  "If set filter custom, it filter title."
   (let ((file "file")
         (buffer "buffer"))
     (custom-set-variables
