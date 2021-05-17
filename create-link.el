@@ -33,8 +33,10 @@
 ;;; Code:
 
 (require 'cl-lib)
-(require 'thingatpt)
+(require 'eww)
 (require 'request)
+(require 'thingatpt)
+(require 'w3m)
 
 (defgroup create-link nil
   "Generate a formatted current page link."
