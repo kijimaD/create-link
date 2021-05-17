@@ -166,25 +166,6 @@ If FORMAT is not specified, use `create-link-default-format'"
 	 `((title . ,(buffer-name))
 	   (url . ,(buffer-file-name))))))
 
-(defun create-link-format-source ()
-  "Helm source for manual format selection."
-  '((name . "Select format")
-    (candidates . (create-link-format-html
-                   create-link-format-markdown
-                   create-link-format-org
-                   create-link-format-doku-wiki
-                   create-link-format-media-wiki
-                   create-link-format-latex))
-    (action . (lambda (candidate)
-                (create-link (intern candidate))))))
-
-;;;###autoload
-(defun create-link-manual ()
-  "Manually select a format and generate a link.
-Version of function `create-link'."
-  (interactive)
-  (helm :sources (create-link-format-source)))
-
 ;;;###autoload
 (defun create-link (&optional format)
   "Create format link.
