@@ -182,7 +182,7 @@ Version of function `create-link'."
   (interactive)
   (create-link
    (intern
-    (completing-read "prompt" create-link-formats nil t nil))))
+    (completing-read "Format: " create-link-formats nil t nil))))
 
 ;;;###autoload
 (defun create-link (&optional format)
