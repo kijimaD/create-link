@@ -176,6 +176,15 @@ If FORMAT is not specified, use `create-link-default-format'"
 	   (url . ,(buffer-file-name))))))
 
 ;;;###autoload
+(defun create-link-manual ()
+  "Manually select a format and generate a link.
+Version of function `create-link'."
+  (interactive)
+  (create-link
+   (intern
+    (completing-read "prompt" create-link-formats nil t nil))))
+
+;;;###autoload
 (defun create-link (&optional format)
   "Create format link.
 If an optional FORMAT is specified,
