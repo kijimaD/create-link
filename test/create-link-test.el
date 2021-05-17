@@ -38,6 +38,16 @@
              (create-link-make-format)))
     (delete-file file)))
 
+(ert-deftest create-link-make-format-manual-test ()
+  ;; manual format selection
+  (let ((buffer "buffer")
+        (file "file"))
+    (find-file file)
+    (should (string-match-p
+             (format "\[\[.*/%s\]\[%s\]\]" file buffer)
+             (create-link-make-format create-link-format-org)))
+    (delete-file file)))
+
 (ert-deftest create-link-make-format-region-test ()
   "If use region, fill title with region."
   (let ((file "file")
