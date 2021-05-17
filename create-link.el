@@ -32,11 +32,11 @@
 
 ;;; Code:
 
-(require 'cl-lib)
-(require 'eww)
-(require 'request)
-(require 'thingatpt)
-(require 'w3m)
+;; (require 'cl-lib)
+;; (require 'eww)
+;; (require 'request)
+;; (require 'thingatpt)
+;; (require 'w3m)
 
 (defgroup create-link nil
   "Generate a formatted current page link."
