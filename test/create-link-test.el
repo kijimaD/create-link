@@ -12,7 +12,7 @@
 (message "Running tests on Emacs %s" emacs-version)
 
 (ert-deftest create-link-make-format-eww-test ()
-  "Each buffer can make format."
+  "Eww buffer."
   ;; eww
   (eww "google.com")
   (sit-for 2)
@@ -21,7 +21,7 @@
            (create-link-make-format))))
 
 (ert-deftest create-link-make-format-w3m-test ()
-  ;; w3m
+  "W3m buffer."
   (w3m-goto-url "google.com")
   (sit-for 2)
   (should (string-match-p
@@ -29,7 +29,7 @@
            (create-link-make-format))))
 
 (ert-deftest create-link-make-format-file-test ()
-  ;; file
+  "File buffer."
   (let ((buffer "buffer")
         (file "file"))
     (find-file file)
@@ -39,7 +39,7 @@
     (delete-file file)))
 
 (ert-deftest create-link-make-format-manual-test ()
-  ;; manual format selection
+  "Manual format selection."
   (let ((buffer "buffer")
         (file "file"))
     (find-file file)
