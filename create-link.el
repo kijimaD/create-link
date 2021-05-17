@@ -33,23 +33,25 @@
 ;;; Code:
 
 (require 'cl-lib)
-(require 'thingatpt)
+(require 'eww)
 (require 'request)
+(require 'thingatpt)
+(require 'w3m)
 
 (defgroup create-link nil
   "Generate a formatted current page link."
   :group 'convenience
   :prefix "create-link-")
 
-(defcustom create-link-default-format 'html
+(defcustom create-link-default-format 'create-link-format-html
   "Default link format."
   :group 'create-link
-  :type '(choice (const :tag "html" html)
-                 (const :tag "markdown" markdown)
-                 (const :tag "org" org)
-                 (const :tag "doku-wiki" doku-wiki)
-                 (const :tag "media-wiki" media-wiki)
-	         (const :tag "latex" latex)))
+  :type '(choice (const :tag "HTML" create-link-format-html)
+                 (const :tag "Markdown" create-link-format-markdown)
+                 (const :tag "Org"  create-link-format-org)
+                 (const :tag "DokuWiki" create-link-format-doku-wiki)
+                 (const :tag "MediaWiki" create-link-format-media-wiki)
+	         (const :tag "LaTeX" create-link-format-latex)))
 
 ;; Format keywords:
 ;; %url% - http://www.google.com/
@@ -99,23 +101,7 @@ Replace all matches for `create-link-filter-title-regexp' with
   :type 'string)
 
 (defvar create-link-scraped-title ""
-  "To save scraped title.")
-
-(defun create-link-raw-format ()
-  "Choose a format type by the custom variable."
-  (pcase create-link-default-format
-    (`html
-     create-link-format-html)
-    (`markdown
-     create-link-format-markdown)
-    (`org
-     create-link-format-org)
-    (`doku-wiki
-     create-link-format-doku-wiki)
-    (`media-wiki
-     create-link-format-media-wiki)
-    (`latex
-     create-link-format-latex)))
+  "Variable to save scraped title.")
 
 (defun create-link-replace-dictionary ()
   "Convert format keyword to corresponding one.
@@ -134,15 +120,14 @@ If point is on URL, fill title with scraped one."
 
 (defun create-link-from-url ()
   "Get title from current point url."
-    (request (thing-at-point-url-at-point)
-      :parser 'buffer-string
-      :success (cl-function
-                 (lambda (&key data &allow-other-keys)
-                   (string-match "<title>\\(.*\\)</title>" data)
-                   (setq create-link-scraped-title (match-string 1 data))
-                   )))
-    (sit-for 1)
-    create-link-scraped-title)
+  (request (thing-at-point-url-at-point)
+    :parser 'buffer-string
+    :success (cl-function
+              (lambda (&key data &allow-other-keys)
+                (string-match "<title>\\(.*\\)</title>" data)
+                (setq create-link-scraped-title (match-string 1 data)))))
+  (sit-for 1)
+  create-link-scraped-title)
 
 (defun create-link-filter-title ()
   "Filter title information.
@@ -153,8 +138,9 @@ Replace all matches for`create-link-filter-title-regexp' with
    create-link-filter-title-replace
    (cdr (assoc 'title (create-link-get-information)))))
 
-(defun create-link-make-format ()
-  "Fill format keywords."
+(defun create-link-make-format (&optional format)
+  "Fill format keywords by FORMAT(optional).
+If FORMAT is not specified, use `create-link-default-format'"
   (seq-reduce
    (lambda (string regexp-replacement-pair)
      (replace-regexp-in-string
@@ -162,7 +148,8 @@ Replace all matches for`create-link-filter-title-regexp' with
       (cdr regexp-replacement-pair)
       string))
    (create-link-replace-dictionary)
-   (create-link-raw-format)))
+   (if format (eval format)
+     (eval create-link-default-format))))
 
 (defun create-link-get-information ()
   "Get keyword information on your browser."
@@ -180,12 +167,13 @@ Replace all matches for`create-link-filter-title-regexp' with
 	   (url . ,(buffer-file-name))))))
 
 ;;;###autoload
-(defun create-link ()
-  "Create formatted link.
-If there is a selected region, fill title with the region."
+(defun create-link (&optional format)
+  "Create format link.
+If an optional FORMAT is specified,
+it will be generated in that format."
   (interactive)
-  (message "Copied! %s" (create-link-make-format))
-  (kill-new (create-link-make-format)))
+  (message "Copied! %s" (create-link-make-format format))
+  (kill-new (create-link-make-format format)))
 
 (provide 'create-link)
 

@@ -15,3 +15,9 @@ cask exec emacs \
      -l create-link.el \
      --eval "(require 'package-lint)" \
      -f package-lint-batch-and-exit
+
+cask exec emacs \
+     -Q -batch \
+     -L . \
+     --eval "(setq byte-compile-error-on-warn t)" \
+     -f batch-byte-compile *.el
