@@ -86,6 +86,15 @@
   :group 'create-link
   :type 'string)
 
+(defconst create-link-formats
+  '(("HTML" . create-link-format-html)
+    ("Markdown" . create-link-format-markdown)
+    ("Org" . create-link-format-org)
+    ("Doku Wiki" . create-link-format-doku-wiki)
+    ("Media Wiki" . create-link-format-media-wiki)
+    ("LaTeX" . create-link-format-latex))
+  "All format list. Use for completion.")
+
 (defcustom create-link-filter-title-regexp "<.*>"
   "Filter title regexp.
 Replace all matches for `create-link-filter-title-regexp' with
