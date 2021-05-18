@@ -27,9 +27,9 @@ jobs:
       with:
         version: ${{ matrix.emacs_version }}
     - name: package-install
-      run: make install
+      run: make package-install
     - name: lisp-test
-      run: make test
+      run: make lisp-test
     - name: package-lint
       run: make package-lint
     - name: byte-compil
