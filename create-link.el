@@ -93,7 +93,7 @@
     (create-link-format-doku-wiki)
     (create-link-format-media-wiki)
     (create-link-format-latex))
-  "All format list. Use for completion.")
+  "All format list.  Use for completion.")
 
 (defcustom create-link-filter-title-regexp "<.*>"
   "Filter title regexp.
