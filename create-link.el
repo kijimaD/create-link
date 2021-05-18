@@ -130,11 +130,11 @@ If point is on URL, fill title with scraped one."
 (defun create-link-from-url ()
   "Get title from current point url."
   (request (thing-at-point-url-at-point)
-    :parser 'buffer-string
-    :success (cl-function
-              (lambda (&key data &allow-other-keys)
-                (string-match "<title>\\(.*\\)</title>" data)
-                (setq create-link-scraped-title (match-string 1 data)))))
+           :parser 'buffer-string
+           :success (cl-function
+                     (lambda (&key data &allow-other-keys)
+                       (string-match "<title>\\(.*\\)</title>" data)
+                       (setq create-link-scraped-title (match-string 1 data)))))
   (sit-for 1)
   create-link-scraped-title)
 
@@ -170,9 +170,9 @@ If FORMAT is not specified, use `create-link-default-format'"
          (if (require 'w3m nil 'noerror)
              `((title . ,(w3m-current-title))
                (url . ,w3m-current-url))))
-	;; otherwise, create-link to the file-buffer
+        ;; otherwise, create-link to the file-buffer
         (t
-	 `((title . ,(buffer-name))
+         `((title . ,(buffer-name))
 	   (url . ,(buffer-file-name))))))
 
 ;;;###autoload
