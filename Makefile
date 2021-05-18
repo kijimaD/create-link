@@ -19,7 +19,7 @@ elisp-lint:
 	-L . \
 	-l create-link.el \
 	--eval "(require 'elisp-lint)" \
-	-f elisp-lint-files-batch create-link.el
+	-f elisp-lint-files-batch --no-indent create-link.el
 
 package-lint:
 	echo Package lint start...

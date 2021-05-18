@@ -51,7 +51,7 @@
                  (const :tag "Org"  create-link-format-org)
                  (const :tag "DokuWiki" create-link-format-doku-wiki)
                  (const :tag "MediaWiki" create-link-format-media-wiki)
-	         (const :tag "LaTeX" create-link-format-latex)))
+                 (const :tag "LaTeX" create-link-format-latex)))
 
 ;; Format keywords:
 ;; %url% - http://www.google.com/
@@ -119,7 +119,7 @@ If point is on URL, fill title with scraped one."
   (cond ((region-active-p)
          (deactivate-mark t)
          `(("%url%" . ,(cdr (assoc 'url (create-link-get-information))))
-           ("%title%" . ,(buffer-substring-no-properties (region-beginning) (region-end)))))
+           ("%title%" . ,(buffer-substring (region-beginning) (region-end)))))
         ((thing-at-point-url-at-point)
          `(("%url%" . ,(thing-at-point-url-at-point))
            ("%title%" . ,(create-link-from-url))))
@@ -173,7 +173,7 @@ If FORMAT is not specified, use `create-link-default-format'"
         ;; otherwise, create-link to the file-buffer
         (t
          `((title . ,(buffer-name))
-	   (url . ,(buffer-file-name))))))
+           (url . ,(buffer-file-name))))))
 
 ;;;###autoload
 (defun create-link-manual ()
