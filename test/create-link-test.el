@@ -12,7 +12,7 @@
 (message "Running tests on Emacs %s" emacs-version)
 
 (ert-deftest create-link-make-format-eww-test ()
-  "Each buffer can make format."
+  "Eww buffer."
   ;; eww
   (eww "google.com")
   (sit-for 2)
@@ -21,7 +21,7 @@
            (create-link-make-format))))
 
 (ert-deftest create-link-make-format-w3m-test ()
-  ;; w3m
+  "W3m buffer."
   (w3m-goto-url "google.com")
   (sit-for 2)
   (should (string-match-p
@@ -29,28 +29,48 @@
            (create-link-make-format))))
 
 (ert-deftest create-link-make-format-file-test ()
-  ;; file
+  "File buffer."
   (let ((buffer "buffer")
         (file "file"))
     (find-file file)
+    (rename-buffer buffer)
+
     (should (string-match-p
-             (format "<a href='.*/" file "'>" buffer "</a>")
+             (format "<a href='.*/%s'>%s</a>" file buffer)
              (create-link-make-format)))
-    (delete-file file)))
+    (delete-file file)
+    (kill-buffer)))
+
+(ert-deftest create-link-make-format-manual-test ()
+  "Manual format selection."
+  (let ((buffer "buffer")
+        (file "file"))
+    (find-file file)
+    (rename-buffer buffer)
+
+    (should (string-match-p
+             (format "\[\[.*/%s\]\[%s\]\]" file buffer)
+             (create-link-make-format create-link-format-org)))
+    (delete-file file)
+    (kill-buffer)))
 
 (ert-deftest create-link-make-format-region-test ()
   "If use region, fill title with region."
   (let ((file "file")
         (content "content"))
     (find-file file)
+    (erase-buffer)
     (insert content)
     (goto-char (point-min))
+    (transient-mark-mode)
+    ;; (region-active-p) -> Return t if Transient Mark mode is enabled and the mark is active.
     (mark-word)
 
     (should (string-match-p
-             (format "<a href='.*/" file "'>" content "</a>")
+             (format "<a href='.*/%s'>%s</a>" file content)
              (create-link-make-format)))
-    (delete-file file)))
+    (delete-file file)
+    (kill-buffer)))
 
 (ert-deftest create-link-make-format-url-test ()
   "If point on url, fill title with scraped title."
@@ -62,9 +82,10 @@
     (goto-char (point-min))
 
     (should (string-match-p
-             (format "<a href='" content "'>.*Google.*</a>")
+             (format "<a href='%s'>.*Google.*</a>" content)
              (create-link-make-format)))
-    (delete-file file)))
+    (delete-file file)
+    (kill-buffer)))
 
 (ert-deftest create-link-make-format-filter-test ()
   "If set filter custom, it filter title."
@@ -77,11 +98,13 @@
     (rename-buffer buffer)
 
     (should (string-match-p
-             (format "<a href='.*/file'>buf</a>") ; 'buffer' -> 'buf'
+             (format "<a href='.*/%s'>buf</a>" file) ; 'buffer' -> 'buf'
              (create-link-make-format)))
     (custom-set-variables
      '(create-link-filter-title-regexp "<.*>")
-     '(create-link-filter-title-replace ""))))
+     '(create-link-filter-title-replace ""))
+    (delete-file file)
+    (kill-buffer)))
 
 (provide 'create-link-test)
 

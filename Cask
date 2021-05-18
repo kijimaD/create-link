@@ -9,4 +9,5 @@
         (depends-on "ert")
         (depends-on "request")
         (depends-on "w3m")
-        (depends-on "package-lint"))
+        (depends-on "package-lint")
+        (depends-on "elisp-lint"))

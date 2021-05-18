@@ -51,7 +51,7 @@
                  (const :tag "Org"  create-link-format-org)
                  (const :tag "DokuWiki" create-link-format-doku-wiki)
                  (const :tag "MediaWiki" create-link-format-media-wiki)
-	         (const :tag "LaTeX" create-link-format-latex)))
+                 (const :tag "LaTeX" create-link-format-latex)))
 
 ;; Format keywords:
 ;; %url% - http://www.google.com/
@@ -86,6 +86,15 @@
   :group 'create-link
   :type 'string)
 
+(defconst create-link-formats
+  '((create-link-format-html)
+    (create-link-format-markdown)
+    (create-link-format-org)
+    (create-link-format-doku-wiki)
+    (create-link-format-media-wiki)
+    (create-link-format-latex))
+  "All format list.  Use for completion.")
+
 (defcustom create-link-filter-title-regexp "<.*>"
   "Filter title regexp.
 Replace all matches for `create-link-filter-title-regexp' with
@@ -110,7 +119,7 @@ If point is on URL, fill title with scraped one."
   (cond ((region-active-p)
          (deactivate-mark t)
          `(("%url%" . ,(cdr (assoc 'url (create-link-get-information))))
-           ("%title%" . ,(buffer-substring-no-properties (region-beginning) (region-end)))))
+           ("%title%" . ,(buffer-substring (region-beginning) (region-end)))))
         ((thing-at-point-url-at-point)
          `(("%url%" . ,(thing-at-point-url-at-point))
            ("%title%" . ,(create-link-from-url))))
@@ -121,11 +130,11 @@ If point is on URL, fill title with scraped one."
 (defun create-link-from-url ()
   "Get title from current point url."
   (request (thing-at-point-url-at-point)
-    :parser 'buffer-string
-    :success (cl-function
-              (lambda (&key data &allow-other-keys)
-                (string-match "<title>\\(.*\\)</title>" data)
-                (setq create-link-scraped-title (match-string 1 data)))))
+           :parser 'buffer-string
+           :success (cl-function
+                     (lambda (&key data &allow-other-keys)
+                       (string-match "<title>\\(.*\\)</title>" data)
+                       (setq create-link-scraped-title (match-string 1 data)))))
   (sit-for 1)
   create-link-scraped-title)
 
@@ -161,10 +170,19 @@ If FORMAT is not specified, use `create-link-default-format'"
          (if (require 'w3m nil 'noerror)
              `((title . ,(w3m-current-title))
                (url . ,w3m-current-url))))
-	;; otherwise, create-link to the file-buffer
+        ;; otherwise, create-link to the file-buffer
         (t
-	 `((title . ,(buffer-name))
-	   (url . ,(buffer-file-name))))))
+         `((title . ,(buffer-name))
+           (url . ,(buffer-file-name))))))
+
+;;;###autoload
+(defun create-link-manual ()
+  "Manually select a format and generate a link.
+Version of function `create-link'."
+  (interactive)
+  (create-link
+   (intern
+    (completing-read "Format: " create-link-formats nil t nil))))
 
 ;;;###autoload
 (defun create-link (&optional format)
