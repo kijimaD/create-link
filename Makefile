@@ -12,6 +12,15 @@ lisp-test:
 	     -l test/create-link-test.el \
 	     -f ert-run-tests-batch-and-exit
 
+elisp-lint:
+	echo Elisp lint start...
+	~/.cask/bin/cask exec emacs \
+	-Q -batch \
+	-L . \
+	-l create-link.el \
+	--eval "(require 'elisp-lint)" \
+	-f elisp-lint-files-batch create-link.el
+
 package-lint:
 	echo Package lint start...
 	~/.cask/bin/cask exec emacs \

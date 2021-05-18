@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  test__package-lint__byte-compile:
+  test__package-lint__byte-compile__elisp-lint:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -34,3 +34,5 @@ jobs:
       run: make package-lint
     - name: byte-compile
       run: make byte-compile
+    - name: elisp-lint
+      run: make elisp-lint
