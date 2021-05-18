@@ -62,6 +62,8 @@
     (erase-buffer)
     (insert content)
     (goto-char (point-min))
+    (transient-mark-mode)
+    ;; (region-active-p) -> Return t if Transient Mark mode is enabled and the mark is active.
     (mark-word)
 
     (should (string-match-p
