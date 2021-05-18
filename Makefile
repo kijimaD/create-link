@@ -2,11 +2,11 @@ package-install:
 	sudo apt-get install w3m
 	git clone https://github.com/cask/cask ~/.cask
 	PATH="$HOME/.cask/bin:$PATH"
-	cask install
+	~/.cask/bin/cask install
 
 lisp-test:
 	echo Test start...
-	cask exec emacs \
+	~/.cask/bin/cask exec emacs \
 	     -Q -batch \
 	     -L . \
 	     -l test/create-link-test.el \
@@ -14,7 +14,7 @@ lisp-test:
 
 package-lint:
 	echo Package lint start...
-	cask exec emacs \
+	~/.cask/bin/cask exec emacs \
 	-Q -batch \
 	-L . \
 	-l create-link.el \
@@ -23,7 +23,7 @@ package-lint:
 
 byte-compile:
 	echo Byte compile start...
-	cask exec emacs \
+	~/.cask/bin/cask exec emacs \
 	-Q -batch \
 	-L . \
 	--eval "(setq byte-compile-error-on-warn t)" \
