@@ -26,7 +26,11 @@ jobs:
     - uses: purcell/setup-emacs@master
       with:
         version: ${{ matrix.emacs_version }}
-    - name: Install w3m
-      run: sudo apt-get install w3m
-    - name: Cask test
-      run: ./test/test-startup.sh
+    - name: package-install
+      run: make install
+    - name: lisp-test
+      run: make test
+    - name: package-lint
+      run: make package-lint
+    - name: byte-compil
+      run: make byte-compile
