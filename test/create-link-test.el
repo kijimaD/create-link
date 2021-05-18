@@ -98,7 +98,7 @@
     (rename-buffer buffer)
 
     (should (string-match-p
-             (format "<a href='.*/file'>buf</a>") ; 'buffer' -> 'buf'
+             (format "<a href='.*/%s'>buf</a>" file) ; 'buffer' -> 'buf'
              (create-link-make-format)))
     (custom-set-variables
      '(create-link-filter-title-regexp "<.*>")
