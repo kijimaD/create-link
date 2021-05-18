@@ -1,1 +1,3 @@
 .cask
+create-link.elc
+create-link-autoloads.*
