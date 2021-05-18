@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  test--package-lint--byte-compile:
+  test__package-lint__byte-compile:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
