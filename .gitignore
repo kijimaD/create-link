@@ -1,3 +1,4 @@
 .cask
 create-link.elc
 create-link-autoloads.*
+test/test-autoloads.*
