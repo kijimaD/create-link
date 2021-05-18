@@ -33,8 +33,10 @@
   (let ((buffer "buffer")
         (file "file"))
     (find-file file)
+    (rename-buffer buffer)
+
     (should (string-match-p
-             (format "<a href='.*/" file "'>" buffer "</a>")
+             (format "<a href='.*/%s'>%s</a>" file buffer)
              (create-link-make-format)))
     (delete-file file)
     (kill-buffer)))
@@ -44,6 +46,8 @@
   (let ((buffer "buffer")
         (file "file"))
     (find-file file)
+    (rename-buffer buffer)
+
     (should (string-match-p
              (format "\[\[.*/%s\]\[%s\]\]" file buffer)
              (create-link-make-format create-link-format-org)))
@@ -55,12 +59,13 @@
   (let ((file "file")
         (content "content"))
     (find-file file)
+    (erase-buffer)
     (insert content)
     (goto-char (point-min))
     (mark-word)
 
     (should (string-match-p
-             (format "<a href='.*/" file "'>" content "</a>")
+             (format "<a href='.*/%s'>%s</a>" file content)
              (create-link-make-format)))
     (delete-file file)
     (kill-buffer)))
@@ -75,7 +80,7 @@
     (goto-char (point-min))
 
     (should (string-match-p
-             (format "<a href='" content "'>.*Google.*</a>")
+             (format "<a href='%s'>.*Google.*</a>" content)
              (create-link-make-format)))
     (delete-file file)
     (kill-buffer)))
@@ -95,7 +100,7 @@
              (create-link-make-format)))
     (custom-set-variables
      '(create-link-filter-title-regexp "<.*>")
-     '(create-link-filter-title-replace ""))))
+     '(create-link-filter-title-replace ""))
     (delete-file file)
     (kill-buffer)))
 
