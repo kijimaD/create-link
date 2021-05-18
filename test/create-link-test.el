@@ -36,7 +36,8 @@
     (should (string-match-p
              (format "<a href='.*/" file "'>" buffer "</a>")
              (create-link-make-format)))
-    (delete-file file)))
+    (delete-file file)
+    (kill-buffer)))
 
 (ert-deftest create-link-make-format-manual-test ()
   "Manual format selection."
@@ -46,7 +47,8 @@
     (should (string-match-p
              (format "\[\[.*/%s\]\[%s\]\]" file buffer)
              (create-link-make-format create-link-format-org)))
-    (delete-file file)))
+    (delete-file file)
+    (kill-buffer)))
 
 (ert-deftest create-link-make-format-region-test ()
   "If use region, fill title with region."
@@ -60,7 +62,8 @@
     (should (string-match-p
              (format "<a href='.*/" file "'>" content "</a>")
              (create-link-make-format)))
-    (delete-file file)))
+    (delete-file file)
+    (kill-buffer)))
 
 (ert-deftest create-link-make-format-url-test ()
   "If point on url, fill title with scraped title."
@@ -74,7 +77,8 @@
     (should (string-match-p
              (format "<a href='" content "'>.*Google.*</a>")
              (create-link-make-format)))
-    (delete-file file)))
+    (delete-file file)
+    (kill-buffer)))
 
 (ert-deftest create-link-make-format-filter-test ()
   "If set filter custom, it filter title."
@@ -92,6 +96,8 @@
     (custom-set-variables
      '(create-link-filter-title-regexp "<.*>")
      '(create-link-filter-title-replace ""))))
+    (delete-file file)
+    (kill-buffer)))
 
 (provide 'create-link-test)
 
