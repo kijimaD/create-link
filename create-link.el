@@ -177,7 +177,6 @@ If FORMAT is not specified, use `create-link-default-format'"
              (setq prefix "run:"))
            `((title . ,(buffer-name))
              (url . ,(concat prefix (buffer-file-name))))))))
-        
 
 ;;;###autoload
 (defun create-link-manual ()
