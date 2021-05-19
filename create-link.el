@@ -172,8 +172,12 @@ If FORMAT is not specified, use `create-link-default-format'"
                (url . ,w3m-current-url))))
         ;; otherwise, create-link to the file-buffer
         (t
-         `((title . ,(buffer-name))
-           (url . ,(buffer-file-name))))))
+         (let ((prefix))
+           (when (equal create-link-default-format 'create-link-format-latex)
+             (setq prefix "run:"))
+           `((title . ,(buffer-name))
+             (url . ,(concat prefix (buffer-file-name))))))))
+        
 
 ;;;###autoload
 (defun create-link-manual ()
