@@ -112,19 +112,74 @@ Replace all matches for `create-link-filter-title-regexp' with
 (defvar create-link-scraped-title ""
   "Variable to save scraped title.")
 
+(defconst create-link-html-regexp
+  "<a.*?href=[\\'\\\"]\\(?1:.+\\)[\\'\\\"].*?>\\(?2:.+\\)</a>"
+  "Regular expression for HTML link.
+Group 1 matches the link.
+Group 2 matches the title.")
+
+(defconst create-link-markdown-regexp
+  "\\[\\(?1:.*\\)\\](\\(?2:.*\\))"
+  "Regular expression for Markdown link.
+Group 1 matches the title.
+Group 2 matches the link.")
+
+(defconst create-link-org-regexp
+  "\\[\\[\\(?1:.*?\\)\\]\\[\\(?2:.*?\\)\\]"
+  "Regular expression for Org link.
+Group 1 matches the link.
+Group 2 matches the title.")
+
+(defconst create-link-doku-wiki-regexp
+  "\\[\\[\\(?1:.*?\\)\s?|\s?\\(?2:.*?\\)\\]\\]"
+  "Regular expression for DokuWiki external link.
+Group 1 matches the link.
+Group 2 matches the title.")
+
+(defconst create-link-media-wiki-regexp
+  "\\[\\(?1:.*?\\)\s\s?\\(?2:.*?\\)\\]"
+  "Regular expression for MediaWiki external link.
+Group 1 matches the link.
+Group 2 matches the title.
+It is problematic.")
+
+(defconst create-link-latex-regexp
+  "\\\\href{\\(run:\\)?\\(?1:.*?\\)}{\\(?2:.*?\\)}"
+  "Regular expression for LaTeX link.
+Group 1 matches the link.
+Group 2 matches the title.")
+
 (defun create-link-replace-dictionary ()
   "Convert format keyword to corresponding one.
 If there is a selected region, fill title with the region.
 If point is on URL, fill title with scraped one."
   (cond ((region-active-p)
          (deactivate-mark t)
-         `(("%url%" . ,(cdr (assoc 'url (create-link-get-information))))
+         `(("%url%" . ,(cdr (assoc 'url (create-link-get-from-buffer))))
            ("%title%" . ,(buffer-substring (region-beginning) (region-end)))))
+        ((thing-at-point-looking-at create-link-html-regexp)
+         `(("%url%" . ,(match-string 1))
+           ("%title%" .,(match-string 2))))
+        ((thing-at-point-looking-at create-link-markdown-regexp)
+         `(("%url%" . ,(match-string 2))
+           ("%title%" . ,(match-string 1))))
+        ((thing-at-point-looking-at create-link-org-regexp)
+         `(("%url%" . ,(match-string 1))
+           ("%title%" .,(match-string 2))))
+        ((thing-at-point-looking-at create-link-doku-wiki-regexp)
+         `(("%url%" . ,(match-string 1))
+           ("%title%" . ,(match-string 2))))
+        ((thing-at-point-looking-at create-link-media-wiki-regexp)
+         `(("%url%" . ,(match-string 1))
+           ("%title%" . ,(match-string 2))))
+        ((thing-at-point-looking-at create-link-latex-regexp)
+         `(("%url%" . ,(match-string 1))
+           ("%title%" . ,(match-string 2))))
         ((thing-at-point-url-at-point)
          `(("%url%" . ,(thing-at-point-url-at-point))
            ("%title%" . ,(create-link-from-url))))
         (t
-         `(("%url%" . ,(cdr (assoc 'url (create-link-get-information))))
+         `(("%url%" . ,(cdr (assoc 'url (create-link-get-from-buffer))))
            ("%title%" . ,(create-link-filter-title))))))
 
 (defun create-link-from-url ()
@@ -138,6 +193,21 @@ If point is on URL, fill title with scraped one."
   (sit-for 1)
   create-link-scraped-title)
 
+(defun create-link-get-from-buffer ()
+  "Get keyword information on each buffer."
+  (cond ((string-match-p "eww" (buffer-name))
+         (if (require 'eww nil 'noerror)
+             `((title . ,(plist-get eww-data :title))
+               (url . ,(eww-current-url)))))
+        ((string-match-p "w3m" (buffer-name))
+         (if (require 'w3m nil 'noerror)
+             `((title . ,(w3m-current-title))
+               (url . ,w3m-current-url))))
+        ;; otherwise, create-link to the file-buffer
+        (t
+         `((title . ,(buffer-name))
+           (url . ,(buffer-file-name))))))
+
 (defun create-link-filter-title ()
   "Filter title information.
 Replace all matches for`create-link-filter-title-regexp' with
@@ -145,7 +215,7 @@ Replace all matches for`create-link-filter-title-regexp' with
   (replace-regexp-in-string
    create-link-filter-title-regexp
    create-link-filter-title-replace
-   (cdr (assoc 'title (create-link-get-information)))))
+   (cdr (assoc 'title (create-link-get-from-buffer)))))
 
 (defun create-link-make-format (&optional format)
   "Fill format keywords by FORMAT(optional).
@@ -159,21 +229,6 @@ If FORMAT is not specified, use `create-link-default-format'"
    (create-link-replace-dictionary)
    (if format (eval format)
      (eval create-link-default-format))))
-
-(defun create-link-get-information ()
-  "Get keyword information on your browser."
-  (cond ((string-match-p "eww" (buffer-name))
-         (if (require 'eww nil 'noerror)
-             `((title . ,(plist-get eww-data :title))
-               (url . ,(eww-current-url)))))
-        ((string-match-p "w3m" (buffer-name))
-         (if (require 'w3m nil 'noerror)
-             `((title . ,(w3m-current-title))
-               (url . ,w3m-current-url))))
-        ;; otherwise, create-link to the file-buffer
-        (t
-         `((title . ,(buffer-name))
-           (url . ,(buffer-file-name))))))
 
 ;;;###autoload
 (defun create-link-manual ()
