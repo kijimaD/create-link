@@ -14,18 +14,18 @@
 (ert-deftest create-link-make-format-eww-test ()
   "Eww buffer."
   ;; eww
-  (eww "google.com")
+  (eww "example.com")
   (sit-for 2)
   (should (string-match-p
-           (format "<a href='.*google.com.*'>.*Google.*</a>")
+           (format "<a href='.*example.com.*'>Example Domain</a>")
            (create-link-make-format))))
 
 (ert-deftest create-link-make-format-w3m-test ()
   "W3m buffer."
-  (w3m-goto-url "google.com")
+  (w3m-goto-url "example.com")
   (sit-for 2)
   (should (string-match-p
-           (format "<a href='.*google.com.*'>.*Google.*</a>")
+           (format "<a href='.*example.com.*'>Example Domain</a>")
            (create-link-make-format))))
 
 (ert-deftest create-link-make-format-file-test ()
@@ -75,14 +75,14 @@
 (ert-deftest create-link-make-format-url-test ()
   "If point on url, fill title with scraped title."
   (let ((file "file")
-        (content "http://google.com"))
+        (content "http://example.com"))
     (find-file file)
     (erase-buffer)
     (insert content)
     (goto-char (point-min))
 
     (should (string-match-p
-             (format "<a href='%s'>.*Google.*</a>" content)
+             (format "<a href='%s'>Example Domain</a>" content)
              (create-link-make-format)))
     (delete-file file)
     (kill-buffer)))
