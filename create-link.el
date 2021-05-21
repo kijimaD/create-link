@@ -112,6 +112,43 @@ Replace all matches for `create-link-filter-title-regexp' with
 (defvar create-link-scraped-title ""
   "Variable to save scraped title.")
 
+(defconst create-link-html-regexp
+  "<a.*?href=[\\'\\\"]\\(?1:.+\\)[\\'\\\"].*?>\\(?2:.+\\)</a>"
+  "Regular expression for HTML link.
+Group 1 matches the link.
+Group 2 matches the title.")
+
+(defconst create-link-markdown-regexp
+  "\\[\\(?1:.*\\)\\](\\(?2:.*\\))"
+  "Regular expression for Markdown link.
+Group 1 matches the title.
+Group 2 matches the link.")
+
+(defconst create-link-org-regexp
+  "\\[\\[\\(?1:.*?\\)\\]\\[\\(?2:.*?\\)\\]"
+  "Regular expression for Org link.
+Group 1 matches the link.
+Group 2 matches the title.")
+
+(defconst create-link-doku-wiki-regexp
+  "\\[\\[\\(?1:.*?\\)\s?|\s?\\(?2:.*?\\)\\]\\]"
+  "Regular expression for DokuWiki external link.
+Group 1 matches the link.
+Group 2 matches the title.")
+
+(defconst create-link-media-wiki-regexp
+  "\\[\\(?1:.*?\\)\s\s?\\(?2:.*?\\)\\]"
+  "Regular expression for MediaWiki external link.
+Group 1 matches the link.
+Group 2 matches the title.
+It is problematic.")
+
+(defconst create-link-latex-regexp
+  "\\\\href{\\(run:\\)?\\(?1:.*?\\)}{\\(?2:.*?\\)}"
+  "Regular expression for LaTeX link.
+Group 1 matches the link.
+Group 2 matches the title.")
+
 (defun create-link-replace-dictionary ()
   "Convert format keyword to corresponding one.
 If there is a selected region, fill title with the region.
@@ -120,6 +157,24 @@ If point is on URL, fill title with scraped one."
          (deactivate-mark t)
          `(("%url%" . ,(cdr (assoc 'url (create-link-get-information))))
            ("%title%" . ,(buffer-substring (region-beginning) (region-end)))))
+        ((thing-at-point-looking-at create-link-html-regexp)
+         `(("%url%" . ,(match-string 1))
+           ("%title%" .,(match-string 2))))
+        ((thing-at-point-looking-at create-link-markdown-regexp)
+         `(("%url%" . ,(match-string 2))
+           ("%title%" . ,(match-string 1))))
+        ((thing-at-point-looking-at create-link-org-regexp)
+         `(("%url%" . ,(match-string 1))
+           ("%title%" .,(match-string 2))))
+        ((thing-at-point-looking-at create-link-doku-wiki-regexp)
+         `(("%url%" . ,(match-string 1))
+           ("%title%" . ,(match-string 2))))
+        ((thing-at-point-looking-at create-link-media-wiki-regexp)
+         `(("%url%" . ,(match-string 1))
+           ("%title%" . ,(match-string 2))))
+        ((thing-at-point-looking-at create-link-latex-regexp)
+         `(("%url%" . ,(match-string 1))
+           ("%title%" . ,(match-string 2))))
         ((thing-at-point-url-at-point)
          `(("%url%" . ,(thing-at-point-url-at-point))
            ("%title%" . ,(create-link-from-url))))
