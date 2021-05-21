@@ -193,6 +193,21 @@ If point is on URL, fill title with scraped one."
   (sit-for 1)
   create-link-scraped-title)
 
+(defun create-link-get-information ()
+  "Get keyword information on your browser."
+  (cond ((string-match-p "eww" (buffer-name))
+         (if (require 'eww nil 'noerror)
+             `((title . ,(plist-get eww-data :title))
+               (url . ,(eww-current-url)))))
+        ((string-match-p "w3m" (buffer-name))
+         (if (require 'w3m nil 'noerror)
+             `((title . ,(w3m-current-title))
+               (url . ,w3m-current-url))))
+        ;; otherwise, create-link to the file-buffer
+        (t
+         `((title . ,(buffer-name))
+           (url . ,(buffer-file-name))))))
+
 (defun create-link-filter-title ()
   "Filter title information.
 Replace all matches for`create-link-filter-title-regexp' with
@@ -214,21 +229,6 @@ If FORMAT is not specified, use `create-link-default-format'"
    (create-link-replace-dictionary)
    (if format (eval format)
      (eval create-link-default-format))))
-
-(defun create-link-get-information ()
-  "Get keyword information on your browser."
-  (cond ((string-match-p "eww" (buffer-name))
-         (if (require 'eww nil 'noerror)
-             `((title . ,(plist-get eww-data :title))
-               (url . ,(eww-current-url)))))
-        ((string-match-p "w3m" (buffer-name))
-         (if (require 'w3m nil 'noerror)
-             `((title . ,(w3m-current-title))
-               (url . ,w3m-current-url))))
-        ;; otherwise, create-link to the file-buffer
-        (t
-         `((title . ,(buffer-name))
-           (url . ,(buffer-file-name))))))
 
 ;;;###autoload
 (defun create-link-manual ()
