@@ -155,7 +155,7 @@ If there is a selected region, fill title with the region.
 If point is on URL, fill title with scraped one."
   (cond ((region-active-p)
          (deactivate-mark t)
-         `(("%url%" . ,(cdr (assoc 'url (create-link-get-information))))
+         `(("%url%" . ,(cdr (assoc 'url (create-link-get-from-buffer))))
            ("%title%" . ,(buffer-substring (region-beginning) (region-end)))))
         ((thing-at-point-looking-at create-link-html-regexp)
          `(("%url%" . ,(match-string 1))
@@ -179,7 +179,7 @@ If point is on URL, fill title with scraped one."
          `(("%url%" . ,(thing-at-point-url-at-point))
            ("%title%" . ,(create-link-from-url))))
         (t
-         `(("%url%" . ,(cdr (assoc 'url (create-link-get-information))))
+         `(("%url%" . ,(cdr (assoc 'url (create-link-get-from-buffer))))
            ("%title%" . ,(create-link-filter-title))))))
 
 (defun create-link-from-url ()
@@ -193,8 +193,8 @@ If point is on URL, fill title with scraped one."
   (sit-for 1)
   create-link-scraped-title)
 
-(defun create-link-get-information ()
-  "Get keyword information on your browser."
+(defun create-link-get-from-buffer ()
+  "Get keyword information on each buffer."
   (cond ((string-match-p "eww" (buffer-name))
          (if (require 'eww nil 'noerror)
              `((title . ,(plist-get eww-data :title))
@@ -215,7 +215,7 @@ Replace all matches for`create-link-filter-title-regexp' with
   (replace-regexp-in-string
    create-link-filter-title-regexp
    create-link-filter-title-replace
-   (cdr (assoc 'title (create-link-get-information)))))
+   (cdr (assoc 'title (create-link-get-from-buffer)))))
 
 (defun create-link-make-format (&optional format)
   "Fill format keywords by FORMAT(optional).
