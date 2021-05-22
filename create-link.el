@@ -223,7 +223,7 @@ e.g. (%url%)[%title%] -> (https:example.com)[Example]."
   (cond
    ((null keyword-list) format)
    (t
-    (test-replace (replace-regexp-in-string
+    (create-link-replace-recursive (replace-regexp-in-string
                    (concat "%" (symbol-name (car keyword-list)) "%")
                    (cdr (assoc (car keyword-list) (create-link-replace-dictionary)))
                    format)
