@@ -234,8 +234,8 @@ e.g. (%url%)[%title%] -> (https:example.com)[Example]."
 If FORMAT is not specified, use `create-link-default-format'"
   (create-link-replace-recursive (eval (if format
                                            format
-                               create-link-default-format))
-                       '(title url)))
+                                         create-link-default-format))
+                                 '(title url)))
 
 ;;;###autoload
 (defun create-link-manual ()
