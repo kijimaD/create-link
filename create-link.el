@@ -217,18 +217,25 @@ Replace all matches for`create-link-filter-title-regexp' with
    create-link-filter-title-replace
    (cdr (assoc 'title (create-link-get-from-buffer)))))
 
+(defun create-link-replace-recursive (format keyword-list)
+  "Replace link FORMAT with KEYWORD-LIST.
+e.g. (%url%)[%title%] -> (https:example.com)[Example]."
+  (cond
+   ((null keyword-list) format)
+   (t
+    (test-replace (replace-regexp-in-string
+                   (concat "%" (symbol-name (car keyword-list)) "%")
+                   (cdr (assoc (car keyword-list) (create-link-replace-dictionary)))
+                   format)
+                  (cdr keyword-list)))))
+
 (defun create-link-make-format (&optional format)
   "Fill format keywords by FORMAT(optional).
 If FORMAT is not specified, use `create-link-default-format'"
-  (seq-reduce
-   (lambda (string regexp-replacement-pair)
-     (replace-regexp-in-string
-      (concat "%" (symbol-name (car regexp-replacement-pair)) "%")
-      (cdr regexp-replacement-pair)
-      string))
-   (create-link-replace-dictionary)
-   (if format (eval format)
-     (eval create-link-default-format))))
+  (create-link-replace-recursive (eval (if format
+                                           format
+                               create-link-default-format))
+                       '(title url)))
 
 ;;;###autoload
 (defun create-link-manual ()
