@@ -112,6 +112,10 @@ Replace all matches for `create-link-filter-title-regexp' with
 (defvar create-link-scraped-title ""
   "Variable to save scraped title.")
 
+(defconst create-link-html-title-regexp
+  "<title>\\(.*\\)</title>"
+  "Regular expression to scrape a page title.")
+
 (defconst create-link-html-regexp
   "<a.*?href=[\\'\\\"]\\(?1:.+\\)[\\'\\\"].*?>\\(?2:.+\\)</a>"
   "Regular expression for HTML link.
@@ -188,7 +192,7 @@ If point is on URL, fill title with scraped one."
     :parser 'buffer-string
     :success (cl-function
               (lambda (&key data &allow-other-keys)
-                (string-match "<title>\\(.*\\)</title>" data)
+                (string-match create-link-html-title-regexp data)
                 (setq create-link-scraped-title (match-string 1 data)))))
   (sit-for 1)
   create-link-scraped-title)
