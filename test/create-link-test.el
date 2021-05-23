@@ -87,25 +87,6 @@
     (delete-file file)
     (kill-buffer)))
 
-(ert-deftest create-link-make-format-filter-test ()
-  "If set filter custom, it filter title."
-  (let ((file "file")
-        (buffer "buffer"))
-    (custom-set-variables
-     '(create-link-filter-title-regexp ".er")
-     '(create-link-filter-title-replace ""))
-    (find-file file)
-    (rename-buffer buffer)
-
-    (should (string-match-p
-             (format "<a href='.*/%s'>buf</a>" file) ; 'buffer' -> 'buf'
-             (create-link-make-format)))
-    (custom-set-variables
-     '(create-link-filter-title-regexp "<.*>")
-     '(create-link-filter-title-replace ""))
-    (delete-file file)
-    (kill-buffer)))
-
 (provide 'create-link-test)
 
 ;;; create-link-test.el ends here
