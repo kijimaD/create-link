@@ -261,12 +261,13 @@ If point is on URL, fill title with scraped one."
    (eval format)))
 
 (defun create-link-make-format (&optional format)
-  "Fill format keywords by FORMAT(optional).
+  "Make format link with FORMAT(optional).
 If FORMAT is not specified, use `create-link-default-format'"
-  (create-link-exec-replace (create-link-replace-dictionary)
-                            (if format
-                                format
-                              create-link-default-format)))
+  (let ((format (if format format create-link-default-format))
+        (rule-dict))
+    (setq rule-dict
+          (create-link-format-rule (create-link-replace-dictionary) format))
+    (create-link-exec-replace rule-dict format)))
 
 ;;;###autoload
 (defun create-link-manual ()
