@@ -227,10 +227,10 @@ e.g. (%url%)[%title%] -> (https:example.com)[Example]."
    ((null keyword-list) format)
    (t
     (create-link-replace-recursive (replace-regexp-in-string
-                   (concat "%" (symbol-name (car keyword-list)) "%")
-                   (cdr (assoc (car keyword-list) (create-link-replace-dictionary)))
-                   format)
-                  (cdr keyword-list)))))
+                                    (concat "%" (symbol-name (car keyword-list)) "%")
+                                    (cdr (assoc (car keyword-list) (create-link-replace-dictionary)))
+                                    format)
+                                   (cdr keyword-list)))))
 
 (defun create-link-make-format (&optional format)
   "Fill format keywords by FORMAT(optional).
@@ -243,7 +243,7 @@ If FORMAT is not specified, use `create-link-default-format'"
 ;;;###autoload
 (defun create-link-manual ()
   "Manually select a format and generate a link.
-Version of function `create-link'."
+Selecting format version of function `create-link'."
   (interactive)
   (create-link
    (intern
