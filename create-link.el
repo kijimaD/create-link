@@ -196,17 +196,16 @@ If point is on URL, fill title with scraped one."
 (defun create-link-get-from-buffer ()
   "Get keyword information on each buffer."
   (cond ((string-match-p "eww" (buffer-name))
-         (if (require 'eww nil 'noerror)
-             `((title . ,(plist-get eww-data :title))
-               (url . ,(eww-current-url)))))
+         `((title . ,(plist-get eww-data :title))
+           (url . ,(eww-current-url))))
         ((string-match-p "w3m" (buffer-name))
-         (if (require 'w3m nil 'noerror)
-             `((title . ,(w3m-current-title))
-               (url . ,w3m-current-url))))
-        ;; otherwise, create-link to the file-buffer
-        (t
+         `((title . ,(w3m-current-title))
+           (url . ,w3m-current-url)))
+        ((buffer-file-name)
          `((title . ,(buffer-name))
-           (url . ,(buffer-file-name))))))
+           (url . ,(buffer-file-name))))
+        (t
+         (error "Can't create link!"))))
 
 (defun create-link-filter-title ()
   "Filter title information.
