@@ -234,7 +234,23 @@ If point is on URL, fill title with scraped one."
     (sit-for 1)
     title))
 
+(defun create-link-format-rule (dict format)
+  "Filter DICT with the FORMAT specific rule."
+  (cond ((eq format 'create-link-format-html)
+         (create-link-html-rule dict))
+        ((eq format 'create-link-format-markdown)
+         (create-link-markdown-rule dict))
+        ((eq format 'create-link-format-org)
+         (create-link-org-rule dict))
+        ((eq format 'create-link-format-doku-wiki)
+         (create-link-doku-wiki-rule dict))
+        ((eq format 'create-link-format-media-wiki)
+         (create-link-media-wiki-rule dict))
+        ((eq format 'create-link-format-latex)
+         (create-link-latex-rule dict))))
+
 (defun create-link-exec-replace (dict format)
+  "Fill FORMAT string with DICT elements."
   (seq-reduce
    (lambda (string regexp-replacement-pair)
      (replace-regexp-in-string
