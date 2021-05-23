@@ -137,10 +137,44 @@ Group 1 matches the link.
 Group 2 matches the title.")
 
 (defun create-link-absolute-linkp (url)
+  "Return t if URL is absolute url."
   (string-match-p "^http[s]?://" url))
 
 (defun create-link-relative-linkp (url)
+  "Return t if URL is relative url."
   (not (create-link-absolute-linkp url)))
+
+(defun create-link-html-rule (dict)
+  "HTML specific rule (Unimplemented).
+DICT is alist with url and title."
+  dict)
+
+(defun create-link-markdown-rule (dict)
+  "Markdown specific rule (Unimplemented).
+DICT is alist with url and title."
+  dict)
+
+(defun create-link-org-rule (dict)
+  "Org specific rule (Unimplemented).
+DICT is alist with url and title."
+  dict)
+
+(defun create-link-doku-wiki-rule (dict)
+  "DokuWiki specific rule (Unimplemented).
+DICT is alist with url and title."
+  dict)
+
+(defun create-link-media-wiki-rule (dict)
+  "MediaWiki specific rule (Unimplemented).
+DICT is alist with url and title."
+  dict)
+
+(defun create-link-latex-rule (dict)
+  "MediaWiki specific rule.
+DICT is alist with url and title."
+  (when (create-link-relative-linkp (cdr (assoc 'url dict)))
+    `((url . ,(concat "run:" (cdr (assoc 'url dict))))
+      (title . ,(cdr (assoc 'title dict))))))
 
 (defun create-link-replace-dictionary ()
   "Convert format keyword to corresponding one.
