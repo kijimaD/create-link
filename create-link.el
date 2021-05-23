@@ -164,11 +164,11 @@ If point is on URL, fill title with scraped one."
            (title . ,(match-string 2))))
         ((thing-at-point-url-at-point)
          `((url . ,(thing-at-point-url-at-point))
-           (title . ,(create-link-scraping-title (thing-at-point-url-at-point)))))
+           (title . ,(create-link-scrape-title (thing-at-point-url-at-point)))))
         (t
          (create-link-get-from-buffer))))
 
-(defun create-link-scraping-title (url)
+(defun create-link-scrape-title (url)
   "Scraping page title from URL."
   (let (title)
     (request url
