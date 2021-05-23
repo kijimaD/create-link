@@ -50,7 +50,7 @@
 
     (should (string-match-p
              (format "\[\[.*/%s\]\[%s\]\]" file buffer)
-             (create-link-make-format create-link-format-org)))
+             (create-link-make-format 'create-link-format-org)))
     (delete-file file)
     (kill-buffer)))
 
