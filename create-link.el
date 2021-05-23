@@ -136,6 +136,48 @@ It is problematic.")
 Group 1 matches the link.
 Group 2 matches the title.")
 
+(defun create-link-absolute-linkp (url)
+  "Return t if URL is absolute url."
+  (string-match-p "^http[s]?://" url))
+
+(defun create-link-relative-linkp (url)
+  "Return t if URL is relative url."
+  (not (create-link-absolute-linkp url)))
+
+(defun create-link-html-rule (dict)
+  "HTML specific rule (Unimplemented).
+DICT is alist with url and title."
+  dict)
+
+(defun create-link-markdown-rule (dict)
+  "Markdown specific rule (Unimplemented).
+DICT is alist with url and title."
+  dict)
+
+(defun create-link-org-rule (dict)
+  "Org specific rule (Unimplemented).
+DICT is alist with url and title."
+  dict)
+
+(defun create-link-doku-wiki-rule (dict)
+  "DokuWiki specific rule (Unimplemented).
+DICT is alist with url and title."
+  dict)
+
+(defun create-link-media-wiki-rule (dict)
+  "MediaWiki specific rule (Unimplemented).
+DICT is alist with url and title."
+  dict)
+
+(defun create-link-latex-rule (dict)
+  "LaTeX specific rule.
+DICT is alist with url and title."
+  (cond ((create-link-relative-linkp (cdr (assoc 'url dict)))
+         `((url . ,(concat "run:" (cdr (assoc 'url dict))))
+           (title . ,(cdr (assoc 'title dict)))))
+        (t
+         dict)))
+
 (defun create-link-replace-dictionary ()
   "Convert format keyword to corresponding one.
 If there is a selected region, fill title with the region.
@@ -168,18 +210,6 @@ If point is on URL, fill title with scraped one."
         (t
          (create-link-get-from-buffer))))
 
-(defun create-link-scrape-title (url)
-  "Scraping page title from URL."
-  (let (title)
-    (request url
-      :parser 'buffer-string
-      :success (cl-function
-                (lambda (&key data &allow-other-keys)
-                  (string-match create-link-html-title-regexp data)
-                  (setq title (match-string 1 data)))))
-    (sit-for 1)
-    title))
-
 (defun create-link-get-from-buffer ()
   "Get keyword information on each buffer."
   (cond ((string-match-p "eww" (buffer-name))
@@ -194,20 +224,52 @@ If point is on URL, fill title with scraped one."
         (t
          (error "Can't create link!"))))
 
+(defun create-link-scrape-title (url)
+  "Scraping page title from URL."
+  (let (title)
+    (request url
+      :parser 'buffer-string
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (string-match create-link-html-title-regexp data)
+                  (setq title (match-string 1 data)))))
+    (sit-for 1)
+    title))
 
+(defun create-link-format-rule (dict format)
+  "Filter DICT with the FORMAT specific rule."
+  (cond ((eq format 'create-link-format-html)
+         (create-link-html-rule dict))
+        ((eq format 'create-link-format-markdown)
+         (create-link-markdown-rule dict))
+        ((eq format 'create-link-format-org)
+         (create-link-org-rule dict))
+        ((eq format 'create-link-format-doku-wiki)
+         (create-link-doku-wiki-rule dict))
+        ((eq format 'create-link-format-media-wiki)
+         (create-link-media-wiki-rule dict))
+        ((eq format 'create-link-format-latex)
+         (create-link-latex-rule dict))))
 
-(defun create-link-make-format (&optional format)
-  "Fill format keywords by FORMAT(optional).
-If FORMAT is not specified, use `create-link-default-format'"
+(defun create-link-exec-replace (dict format)
+  "Fill FORMAT string with DICT elements."
   (seq-reduce
    (lambda (string regexp-replacement-pair)
      (replace-regexp-in-string
       (concat "%" (symbol-name (car regexp-replacement-pair)) "%")
       (cdr regexp-replacement-pair)
       string))
-   (create-link-replace-dictionary)
-   (if format (eval format)
-     (eval create-link-default-format))))
+   dict
+   (eval format)))
+
+(defun create-link-make-format (&optional format)
+  "Make format link with FORMAT(optional).
+If FORMAT is not specified, use `create-link-default-format'"
+  (let ((format (if format format create-link-default-format))
+        (rule-dict))
+    (setq rule-dict
+          (create-link-format-rule (create-link-replace-dictionary) format))
+    (create-link-exec-replace rule-dict format)))
 
 ;;;###autoload
 (defun create-link-manual ()
