@@ -196,18 +196,23 @@ If point is on URL, fill title with scraped one."
 
 
 
-(defun create-link-make-format (&optional format)
-  "Fill format keywords by FORMAT(optional).
-If FORMAT is not specified, use `create-link-default-format'"
+(defun create-link-exec-replace (dict format)
   (seq-reduce
    (lambda (string regexp-replacement-pair)
      (replace-regexp-in-string
       (concat "%" (symbol-name (car regexp-replacement-pair)) "%")
       (cdr regexp-replacement-pair)
       string))
-   (create-link-replace-dictionary)
-   (if format (eval format)
-     (eval create-link-default-format))))
+   dict
+   (eval format)))
+
+(defun create-link-make-format (&optional format)
+  "Fill format keywords by FORMAT(optional).
+If FORMAT is not specified, use `create-link-default-format'"
+  (create-link-exec-replace (create-link-replace-dictionary)
+                            (if format
+                                format
+                              create-link-default-format)))
 
 ;;;###autoload
 (defun create-link-manual ()
