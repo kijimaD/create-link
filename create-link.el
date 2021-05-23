@@ -174,18 +174,6 @@ If point is on URL, fill title with scraped one."
         (t
          (create-link-get-from-buffer))))
 
-(defun create-link-scrape-title (url)
-  "Scraping page title from URL."
-  (let (title)
-    (request url
-      :parser 'buffer-string
-      :success (cl-function
-                (lambda (&key data &allow-other-keys)
-                  (string-match create-link-html-title-regexp data)
-                  (setq title (match-string 1 data)))))
-    (sit-for 1)
-    title))
-
 (defun create-link-get-from-buffer ()
   "Get keyword information on each buffer."
   (cond ((string-match-p "eww" (buffer-name))
@@ -200,7 +188,17 @@ If point is on URL, fill title with scraped one."
         (t
          (error "Can't create link!"))))
 
-
+(defun create-link-scrape-title (url)
+  "Scraping page title from URL."
+  (let (title)
+    (request url
+      :parser 'buffer-string
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (string-match create-link-html-title-regexp data)
+                  (setq title (match-string 1 data)))))
+    (sit-for 1)
+    title))
 
 (defun create-link-exec-replace (dict format)
   (seq-reduce
