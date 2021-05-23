@@ -195,25 +195,19 @@ If point is on URL, fill title with scraped one."
          (error "Can't create link!"))))
 
 
-(defun create-link-replace-recursive (format keyword-list)
-  "Replace link FORMAT with KEYWORD-LIST.
-e.g. (%url%)[%title%] -> (https:example.com)[Example]."
-  (cond
-   ((null keyword-list) format)
-   (t
-    (create-link-replace-recursive (replace-regexp-in-string
-                                    (concat "%" (symbol-name (car keyword-list)) "%")
-                                    (cdr (assoc (car keyword-list) (create-link-replace-dictionary)))
-                                    format)
-                                   (cdr keyword-list)))))
 
 (defun create-link-make-format (&optional format)
   "Fill format keywords by FORMAT(optional).
 If FORMAT is not specified, use `create-link-default-format'"
-  (create-link-replace-recursive (eval (if format
-                                           format
-                                         create-link-default-format))
-                                 '(title url)))
+  (seq-reduce
+   (lambda (string regexp-replacement-pair)
+     (replace-regexp-in-string
+      (concat "%" (symbol-name (car regexp-replacement-pair)) "%")
+      (cdr regexp-replacement-pair)
+      string))
+   (create-link-replace-dictionary)
+   (if format (eval format)
+     (eval create-link-default-format))))
 
 ;;;###autoload
 (defun create-link-manual ()
