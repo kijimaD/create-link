@@ -95,9 +95,6 @@
     (create-link-format-latex))
   "All format list.  Use for completion.")
 
-(defvar create-link-scraped-title ""
-  "Variable to save scraped title.")
-
 (defconst create-link-html-title-regexp
   "<title>\\(.*\\)</title>"
   "Regular expression to scrape a page title.")
@@ -173,14 +170,15 @@ If point is on URL, fill title with scraped one."
 
 (defun create-link-scraping-title (url)
   "Scraping page title from URL."
-  (request url
-    :parser 'buffer-string
-    :success (cl-function
-              (lambda (&key data &allow-other-keys)
-                (string-match create-link-html-title-regexp data)
-                (setq create-link-scraped-title (match-string 1 data)))))
-  (sit-for 1)
-  create-link-scraped-title)
+  (let (title)
+    (request url
+      :parser 'buffer-string
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (string-match create-link-html-title-regexp data)
+                  (setq title (match-string 1 data)))))
+    (sit-for 1)
+    title))
 
 (defun create-link-get-from-buffer ()
   "Get keyword information on each buffer."
