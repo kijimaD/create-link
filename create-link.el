@@ -172,9 +172,11 @@ DICT is alist with url and title."
 (defun create-link-latex-rule (dict)
   "LaTeX specific rule.
 DICT is alist with url and title."
-  (when (create-link-relative-linkp (cdr (assoc 'url dict)))
-    `((url . ,(concat "run:" (cdr (assoc 'url dict))))
-      (title . ,(cdr (assoc 'title dict))))))
+  (cond ((create-link-relative-linkp (cdr (assoc 'url dict)))
+         `((url . ,(concat "run:" (cdr (assoc 'url dict))))
+           (title . ,(cdr (assoc 'title dict)))))
+        (t
+         dict)))
 
 (defun create-link-replace-dictionary ()
   "Convert format keyword to corresponding one.
