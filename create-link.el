@@ -183,8 +183,7 @@ If point is on URL, fill title with scraped one."
          `((url . ,(thing-at-point-url-at-point))
            (title . ,(create-link-from-url))))
         (t
-         `((url . ,(cdr (assoc 'url (create-link-get-from-buffer))))
-           (title . ,(create-link-filter-title))))))
+         (create-link-get-from-buffer))))
 
 (defun create-link-from-url ()
   "Get title from current point url."
