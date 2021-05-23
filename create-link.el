@@ -170,7 +170,7 @@ DICT is alist with url and title."
   dict)
 
 (defun create-link-latex-rule (dict)
-  "MediaWiki specific rule.
+  "LaTeX specific rule.
 DICT is alist with url and title."
   (when (create-link-relative-linkp (cdr (assoc 'url dict)))
     `((url . ,(concat "run:" (cdr (assoc 'url dict))))
