@@ -95,22 +95,9 @@
     (create-link-format-latex))
   "All format list.  Use for completion.")
 
-(defcustom create-link-filter-title-regexp "<.*>"
-  "Filter title regexp.
-Replace all matches for `create-link-filter-title-regexp' with
-`create-link-filter-title-replace'."
-  :group 'create-link
-  :type 'regexp)
-
-(defcustom create-link-filter-title-replace ""
-  "Filter title replace.
-Replace all matches for `create-link-filter-title-regexp' with
-`create-link-filter-title-replace'."
-  :group 'create-link
-  :type 'string)
-
-(defvar create-link-scraped-title ""
-  "Variable to save scraped title.")
+(defconst create-link-html-title-regexp
+  "<title>\\(.*\\)</title>"
+  "Regular expression to scrape a page title.")
 
 (defconst create-link-html-regexp
   "<a.*?href=[\\'\\\"]\\(?1:.+\\)[\\'\\\"].*?>\\(?2:.+\\)</a>"
@@ -155,67 +142,59 @@ If there is a selected region, fill title with the region.
 If point is on URL, fill title with scraped one."
   (cond ((region-active-p)
          (deactivate-mark t)
-         `(("%url%" . ,(cdr (assoc 'url (create-link-get-from-buffer))))
-           ("%title%" . ,(buffer-substring (region-beginning) (region-end)))))
+         `((url . ,(cdr (assoc 'url (create-link-get-from-buffer))))
+           (title . ,(buffer-substring (region-beginning) (region-end)))))
         ((thing-at-point-looking-at create-link-html-regexp)
-         `(("%url%" . ,(match-string 1))
-           ("%title%" .,(match-string 2))))
+         `((url . ,(match-string 1))
+           (title . ,(match-string 2))))
         ((thing-at-point-looking-at create-link-markdown-regexp)
-         `(("%url%" . ,(match-string 2))
-           ("%title%" . ,(match-string 1))))
+         `((url . ,(match-string 2))
+           (title . ,(match-string 1))))
         ((thing-at-point-looking-at create-link-org-regexp)
-         `(("%url%" . ,(match-string 1))
-           ("%title%" .,(match-string 2))))
+         `((url . ,(match-string 1))
+           (title . ,(match-string 2))))
         ((thing-at-point-looking-at create-link-doku-wiki-regexp)
-         `(("%url%" . ,(match-string 1))
-           ("%title%" . ,(match-string 2))))
+         `((url . ,(match-string 1))
+           (title . ,(match-string 2))))
         ((thing-at-point-looking-at create-link-media-wiki-regexp)
-         `(("%url%" . ,(match-string 1))
-           ("%title%" . ,(match-string 2))))
+         `((url . ,(match-string 1))
+           (title . ,(match-string 2))))
         ((thing-at-point-looking-at create-link-latex-regexp)
-         `(("%url%" . ,(match-string 1))
-           ("%title%" . ,(match-string 2))))
+         `((url . ,(match-string 1))
+           (title . ,(match-string 2))))
         ((thing-at-point-url-at-point)
-         `(("%url%" . ,(thing-at-point-url-at-point))
-           ("%title%" . ,(create-link-from-url))))
+         `((url . ,(thing-at-point-url-at-point))
+           (title . ,(create-link-scrape-title (thing-at-point-url-at-point)))))
         (t
-         `(("%url%" . ,(cdr (assoc 'url (create-link-get-from-buffer))))
-           ("%title%" . ,(create-link-filter-title))))))
+         (create-link-get-from-buffer))))
 
-(defun create-link-from-url ()
-  "Get title from current point url."
-  (request (thing-at-point-url-at-point)
-           :parser 'buffer-string
-           :success (cl-function
-                     (lambda (&key data &allow-other-keys)
-                       (string-match "<title>\\(.*\\)</title>" data)
-                       (setq create-link-scraped-title (match-string 1 data)))))
-  (sit-for 1)
-  create-link-scraped-title)
+(defun create-link-scrape-title (url)
+  "Scraping page title from URL."
+  (let (title)
+    (request url
+      :parser 'buffer-string
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (string-match create-link-html-title-regexp data)
+                  (setq title (match-string 1 data)))))
+    (sit-for 1)
+    title))
 
 (defun create-link-get-from-buffer ()
   "Get keyword information on each buffer."
   (cond ((string-match-p "eww" (buffer-name))
-         (if (require 'eww nil 'noerror)
-             `((title . ,(plist-get eww-data :title))
-               (url . ,(eww-current-url)))))
+         `((title . ,(plist-get eww-data :title))
+           (url . ,(eww-current-url))))
         ((string-match-p "w3m" (buffer-name))
-         (if (require 'w3m nil 'noerror)
-             `((title . ,(w3m-current-title))
-               (url . ,w3m-current-url))))
-        ;; otherwise, create-link to the file-buffer
-        (t
+         `((title . ,(w3m-current-title))
+           (url . ,w3m-current-url)))
+        ((buffer-file-name)
          `((title . ,(buffer-name))
-           (url . ,(buffer-file-name))))))
+           (url . ,(buffer-file-name))))
+        (t
+         (error "Can't create link!"))))
 
-(defun create-link-filter-title ()
-  "Filter title information.
-Replace all matches for`create-link-filter-title-regexp' with
-`create-link-filter-title-replace'."
-  (replace-regexp-in-string
-   create-link-filter-title-regexp
-   create-link-filter-title-replace
-   (cdr (assoc 'title (create-link-get-from-buffer)))))
+
 
 (defun create-link-make-format (&optional format)
   "Fill format keywords by FORMAT(optional).
@@ -223,7 +202,7 @@ If FORMAT is not specified, use `create-link-default-format'"
   (seq-reduce
    (lambda (string regexp-replacement-pair)
      (replace-regexp-in-string
-      (car regexp-replacement-pair)
+      (concat "%" (symbol-name (car regexp-replacement-pair)) "%")
       (cdr regexp-replacement-pair)
       string))
    (create-link-replace-dictionary)
@@ -233,7 +212,7 @@ If FORMAT is not specified, use `create-link-default-format'"
 ;;;###autoload
 (defun create-link-manual ()
   "Manually select a format and generate a link.
-Version of function `create-link'."
+Selecting format version of function `create-link'."
   (interactive)
   (create-link
    (intern
