@@ -95,20 +95,6 @@
     (create-link-format-latex))
   "All format list.  Use for completion.")
 
-(defcustom create-link-filter-title-regexp "<.*>"
-  "Filter title regexp.
-Replace all matches for `create-link-filter-title-regexp' with
-`create-link-filter-title-replace'."
-  :group 'create-link
-  :type 'regexp)
-
-(defcustom create-link-filter-title-replace ""
-  "Filter title replace.
-Replace all matches for `create-link-filter-title-regexp' with
-`create-link-filter-title-replace'."
-  :group 'create-link
-  :type 'string)
-
 (defvar create-link-scraped-title ""
   "Variable to save scraped title.")
 
@@ -210,14 +196,6 @@ If point is on URL, fill title with scraped one."
         (t
          (error "Can't create link!"))))
 
-(defun create-link-filter-title ()
-  "Filter title information.
-Replace all matches for`create-link-filter-title-regexp' with
-`create-link-filter-title-replace'."
-  (replace-regexp-in-string
-   create-link-filter-title-regexp
-   create-link-filter-title-replace
-   (cdr (assoc 'title (create-link-get-from-buffer)))))
 
 (defun create-link-replace-recursive (format keyword-list)
   "Replace link FORMAT with KEYWORD-LIST.
