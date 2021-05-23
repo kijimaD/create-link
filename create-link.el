@@ -136,6 +136,12 @@ It is problematic.")
 Group 1 matches the link.
 Group 2 matches the title.")
 
+(defun create-link-absolute-linkp (url)
+  (string-match-p "^http[s]?://" url))
+
+(defun create-link-relative-linkp (url)
+  (not (create-link-absolute-linkp url)))
+
 (defun create-link-replace-dictionary ()
   "Convert format keyword to corresponding one.
 If there is a selected region, fill title with the region.
