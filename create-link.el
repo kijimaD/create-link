@@ -260,7 +260,7 @@ If point is on URL, fill title with scraped one."
       (cdr regexp-replacement-pair)
       string))
    dict
-   (eval format)))
+   (symbol-value format)))
 
 (defun create-link-make-format (&optional format)
   "Make format link with FORMAT(optional).
