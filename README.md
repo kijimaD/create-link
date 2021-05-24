@@ -1,22 +1,17 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![check](https://github.com/kijimaD/create-link/actions/workflows/test.yml/badge.svg)](https://github.com/kijimaD/create-link/actions/workflows/test.yml)
-# 🔗create-link.el
+# create-link.el
 
 Formatted link generator package for Emacs.
+This package adds two smart functions, `(create-link)` and `(create-link-manual)`
 
 e.g. Open [Google](https://google.com) on with `eww`. Then `M-x create-link` to get a formatted link(↓HTML).
 
-![eww-draw](https://user-images.githubusercontent.com/11595790/118385727-86c8ac00-b64c-11eb-9be7-724f3eaf2fdc.png)
+![rsz_1118385727-86c8ac00-b64c-11eb-9be7-724f3eaf2fdc](https://user-images.githubusercontent.com/11595790/119352489-b4f95c00-bcdc-11eb-9bc3-82c134e4a69e.png)
 
 e.g. Point on URL `M-x create-link`, fill title with scraped one.
 
-![title-from-link-draw](https://user-images.githubusercontent.com/11595790/118385789-15d5c400-b64d-11eb-9380-2e6b786f41c3.png)
-
-## 🌟Available buffer
-
-- eww
-- w3m
-- File (Make format link with buffer and file path. Thanks [sergiruiztrepat](https://github.com/kijimaD/create-link/pull/7#issue-640817593))
+![rsz_11118385789-15d5c400-b64d-11eb-9380-2e6b786f41c3](https://user-images.githubusercontent.com/11595790/119352549-ca6e8600-bcdc-11eb-99ca-ec71594d14af.png)
 
 ## 🖨Output Format
 
@@ -28,6 +23,20 @@ e.g. Point on URL `M-x create-link`, fill title with scraped one.
 - Org-mode
 
 We want to support more formats, please send us your PR! [This PR](https://github.com/kijimaD/create-link/pull/7) may be helpful!
+
+## 🔌Context
+
+- Region active: Use region text for title
+- On format link: Convert link
+- On URL: Use scraping title
+- Specific buffer
+  - eww
+  - w3m
+  - File (Make format link with buffer and file path. Thanks [sergiruiztrepat](https://github.com/kijimaD/create-link/pull/7#issue-640817593))
+
+## 💡Image
+
+[![](https://mermaid.ink/img/eyJjb2RlIjoiZ3JhcGggVERcbiAgICBBW1wiKGNyZWF0ZS1saW5rKSBvciAoY3JlYXRlLWxpbmstbWFudWFsKVwiXSAtLT4gQyhbPEN1cnJlbnQgcG9pbnQgaXMuLi4-XSlcbiAgICBDIC0tPiBEW1JlZ2lvbiBhY3RpdmU_XVxuICAgIEQgLS0-IHxVc2UgcmVnaW9uIHdpdGggdGl0bGV8Rk9STUFUW09VVFBVVF1cbiAgICBEIC0tPiB8Tm98IEVbTGluayBmb3JtYXRzP11cbiAgICBFIC0tPiB8Q29udmVydHxGT1JNQVRcbiAgICBFIC0tPiB8Tm98IEZbVVJMP11cbiAgICBGIC0tPiB8VXNlIHNjcmFwaW5nIHRpdGxlIHdpdGggdXJsfEZPUk1BVFxuICAgIEYgLS0-IHxOb3wgRyhbPEJ1ZmZlciBpcy4uLj5dKVxuICAgIEcgLS0-IEhbZXd3P11cbiAgICBIIC0tPiB8R2V0IGxpbmsgZGF0YXxGT1JNQVRcbiAgICBIIC0tPiB8Tm98SVt3M20_XVxuICAgIEkgLS0-IHxHZXQgbGluayBkYXRhfEZPUk1BVFxuICAgIEkgLS0-IHxOb3xKW0ZpbGUgYnVmZmVyP11cbiAgICBKIC0tPiB8R2V0IEZpbGUgZGF0YXxGT1JNQVQiLCJtZXJtYWlkIjp7fSwidXBkYXRlRWRpdG9yIjpmYWxzZX0)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiZ3JhcGggVERcbiAgICBBW1wiKGNyZWF0ZS1saW5rKSBvciAoY3JlYXRlLWxpbmstbWFudWFsKVwiXSAtLT4gQyhbPEN1cnJlbnQgcG9pbnQgaXMuLi4-XSlcbiAgICBDIC0tPiBEW1JlZ2lvbiBhY3RpdmU_XVxuICAgIEQgLS0-IHxVc2UgcmVnaW9uIHdpdGggdGl0bGV8Rk9STUFUW09VVFBVVF1cbiAgICBEIC0tPiB8Tm98IEVbTGluayBmb3JtYXRzP11cbiAgICBFIC0tPiB8Q29udmVydHxGT1JNQVRcbiAgICBFIC0tPiB8Tm98IEZbVVJMP11cbiAgICBGIC0tPiB8VXNlIHNjcmFwaW5nIHRpdGxlIHdpdGggdXJsfEZPUk1BVFxuICAgIEYgLS0-IHxOb3wgRyhbPEJ1ZmZlciBpcy4uLj5dKVxuICAgIEcgLS0-IEhbZXd3P11cbiAgICBIIC0tPiB8R2V0IGxpbmsgZGF0YXxGT1JNQVRcbiAgICBIIC0tPiB8Tm98SVt3M20_XVxuICAgIEkgLS0-IHxHZXQgbGluayBkYXRhfEZPUk1BVFxuICAgIEkgLS0-IHxOb3xKW0ZpbGUgYnVmZmVyP11cbiAgICBKIC0tPiB8R2V0IEZpbGUgZGF0YXxGT1JNQVQiLCJtZXJtYWlkIjp7fSwidXBkYXRlRWRpdG9yIjpmYWxzZX0)
 
 ## 🔧Customize
 
