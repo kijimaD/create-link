@@ -236,20 +236,20 @@ If point is on URL, fill title with scraped one."
     (sit-for 1)
     title))
 
-(defun create-link-format-rule (dict format)
-  "Filter DICT with the FORMAT specific rule."
+(defun create-link-format-rule (format)
+  "Return rule funtion corresponding to FORMAT."
   (cond ((eq format 'create-link-format-html)
-         (create-link-html-rule dict))
+         'create-link-html-rule)
         ((eq format 'create-link-format-markdown)
-         (create-link-markdown-rule dict))
+         'create-link-markdown-rule)
         ((eq format 'create-link-format-org)
-         (create-link-org-rule dict))
+         'create-link-org-rule)
         ((eq format 'create-link-format-doku-wiki)
-         (create-link-doku-wiki-rule dict))
+         'create-link-doku-wiki-rule)
         ((eq format 'create-link-format-media-wiki)
-         (create-link-media-wiki-rule dict))
+         'create-link-media-wiki-rule)
         ((eq format 'create-link-format-latex)
-         (create-link-latex-rule dict))))
+         'create-link-latex-rule)))
 
 (defun create-link-exec-replace (dict format)
   "Fill FORMAT string with DICT elements."
@@ -265,11 +265,9 @@ If point is on URL, fill title with scraped one."
 (defun create-link-make-format (&optional format)
   "Make format link with FORMAT(optional).
 If FORMAT is not specified, use `create-link-default-format'"
-  (let ((format (if format format create-link-default-format))
-        (rule-dict))
-    (setq rule-dict
-          (create-link-format-rule (create-link-replace-dictionary) format))
-    (create-link-exec-replace rule-dict format)))
+    (create-link-exec-replace (funcall (create-link-format-rule format)
+                                       (create-link-replace-dictionary))
+                              (if format format create-link-default-format)))
 
 ;;;###autoload
 (defun create-link-manual ()
