@@ -87,6 +87,17 @@
     (delete-file file)
     (kill-buffer)))
 
+(ert-deftest create-link-make-format-rule-test ()
+  "Apply specific format rule."
+  ( ((file "file"))
+    (find-file file)
+    (should (string-match-p
+             (format "<a href='.*/%s'>%s</a>" file)
+             (create-link-make-format)))
+    (delete-file file)
+    )
+  )
+
 (provide 'create-link-test)
 
 ;;; create-link-test.el ends here
