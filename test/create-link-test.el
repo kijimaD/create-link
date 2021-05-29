@@ -87,6 +87,19 @@
     (delete-file file)
     (kill-buffer)))
 
+(ert-deftest create-link-make-format-rule-test ()
+  "Apply specific format rule."
+  (let ((file "file")
+        (buffer "buffer"))
+    (find-file file)
+    (rename-buffer buffer)
+
+    (should (string-match-p
+             (format "\\href{run:.*%s}{%s}" file buffer)
+             (create-link-make-format 'create-link-format-latex)))
+    (delete-file file)
+    (kill-buffer)))
+
 (provide 'create-link-test)
 
 ;;; create-link-test.el ends here
