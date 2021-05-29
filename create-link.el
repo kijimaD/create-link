@@ -54,8 +54,8 @@
                  (const :tag "LaTeX" create-link-format-latex)))
 
 ;; Format keywords:
-;; %url% - http://www.google.com/
-;; %title% - Google
+;; %url% - (e.g. https://www.google.com/)
+;; %title% - (e.g. Google)
 (defcustom create-link-format-html "<a href='%url%'>%title%</a>"
   "HTML link format."
   :group 'create-link
@@ -237,7 +237,7 @@ If point is on URL, fill title with scraped one."
     title))
 
 (defun create-link-format-rule (format)
-  "Return rule funtion corresponding to FORMAT."
+  "Return rule function corresponding to FORMAT."
   (cond ((eq format 'create-link-format-html)
          'create-link-html-rule)
         ((eq format 'create-link-format-markdown)
