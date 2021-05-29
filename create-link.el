@@ -265,12 +265,10 @@ If point is on URL, fill title with scraped one."
 (defun create-link-make-format (&optional format)
   "Make format link with FORMAT(optional).
 If FORMAT is not specified, use `create-link-default-format'"
-  (create-link-exec-replace (funcall (create-link-format-rule
-                                      (if format
-                                          format
-                                        create-link-default-format))
-                                     (create-link-replace-dictionary))
-                            (if format format create-link-default-format)))
+  (let ((format (if format format create-link-default-format)))
+    (create-link-exec-replace (funcall (create-link-format-rule format)
+                                       (create-link-replace-dictionary))
+                              format)))
 
 ;;;###autoload
 (defun create-link-manual ()
