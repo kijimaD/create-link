@@ -1,3 +1,4 @@
+[![MELPA](https://melpa.org/packages/create-link-badge.svg)](https://melpa.org/#/create-link)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![check](https://github.com/kijimaD/create-link/actions/workflows/test.yml/badge.svg)](https://github.com/kijimaD/create-link/actions/workflows/test.yml)
 # create-link.el
