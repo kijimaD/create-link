@@ -5,7 +5,7 @@
 
 ;; Author: Kijima Daigo <norimaking777@gmail.com>
 ;; Version: 1.0.0
-;; Package-Requires: ((emacs "25.1") (request "0.3.2") (w3m "1.4.632"))
+;; Package-Requires: ((emacs "25.1") (w3m "1.4.632"))
 ;; Keywords: link format browser convenience
 ;; URL: https://github.com/kijimaD/create-link
 
@@ -35,7 +35,6 @@
 
 (require 'cl-lib)
 (require 'eww)
-(require 'request)
 (require 'thingatpt)
 (require 'w3m)
 
@@ -227,14 +226,13 @@ If point is on URL, fill title with scraped one."
 
 (defun create-link-scrape-title (url)
   "Scraping page title from URL."
-  (let (title)
-    (request url
-      :parser 'buffer-string
-      :success (cl-function
-                (lambda (&key data &allow-other-keys)
-                  (string-match create-link-html-title-regexp data)
-                  (setq title (match-string 1 data)))))
-    (sit-for 1)
+  (let* ((buffer (url-retrieve-synchronously url))
+         (contents (with-current-buffer buffer
+                     (buffer-substring (point-min) (point-max))))
+         (title))
+    (string-match create-link-html-title-regexp contents)
+    (setq title (match-string 1 contents))
+    (kill-buffer buffer)
     title))
 
 (defun create-link-format-rule (format)
