@@ -27,8 +27,9 @@
 ;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
-;; Create formatted url on current buffer(w3m, eww).
+;; Create formatted url depending on the context.
 ;; M-x create-link
+;; M-x create-link-manual
 
 ;;; Code:
 
