@@ -214,10 +214,10 @@ If point is on URL, fill title with scraped one."
 
 (defun create-link-get-from-buffer ()
   "Get keyword information on each buffer."
-  (cond ((string-match-p "eww" (buffer-name))
+  (cond ((eq major-mode 'eww-mode)
          `((title . ,(plist-get eww-data :title))
            (url . ,(eww-current-url))))
-        ((string-match-p "w3m" (buffer-name))
+        ((eq major-mode 'w3m-mode)
          `((title . ,(w3m-current-title))
            (url . ,w3m-current-url)))
         ((buffer-file-name)
