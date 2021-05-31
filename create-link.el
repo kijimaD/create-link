@@ -5,7 +5,7 @@
 
 ;; Author: Kijima Daigo <norimaking777@gmail.com>
 ;; Version: 1.0.0
-;; Package-Requires: ((emacs "25.1") (w3m "1.4.632"))
+;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: link format browser convenience
 ;; URL: https://github.com/kijimaD/create-link
 
@@ -36,7 +36,9 @@
 (require 'cl-lib)
 (require 'eww)
 (require 'thingatpt)
-(require 'w3m)
+
+(defvar w3m-current-url)
+(declare-function w3m-current-title "ext:w3m-util")
 
 (defgroup create-link nil
   "Generate a formatted current page link."
