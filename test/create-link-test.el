@@ -15,7 +15,7 @@
   "Eww buffer."
   ;; eww
   (eww "example.com")
-  (sit-for 2)
+  (sit-for 1)
   (should (string-match-p
            (format "<a href='.*example.com.*'>Example Domain</a>")
            (create-link-make-format))))
@@ -23,7 +23,7 @@
 (ert-deftest create-link-make-format-w3m-test ()
   "W3m buffer."
   (w3m-goto-url "example.com")
-  (sit-for 2)
+  (sit-for 1)
   (should (string-match-p
            (format "<a href='.*example.com.*'>Example Domain</a>")
            (create-link-make-format))))
@@ -41,18 +41,33 @@
     (delete-file file)
     (kill-buffer)))
 
-(ert-deftest create-link-make-format-manual-test ()
-  "Manual format selection."
-  (let ((buffer "buffer")
-        (file "file"))
-    (find-file file)
-    (rename-buffer buffer)
-
-    (should (string-match-p
-             (format "\[\[.*/%s\]\[%s\]\]" file buffer)
-             (create-link-make-format 'create-link-format-org)))
-    (delete-file file)
-    (kill-buffer)))
+(ert-deftest create-link-make-format-manual ()
+  "Manual format selection.
+<a href='http://example.com/'>Example Domain</a> - html
+[Example Domain](http://example.com/) - markdown
+[[http://example.com/][Example Domain]] - org
+[http://example.com/ Example Domain] - doku-wiki
+\href{http://example.com/}{Example Domain} - latex"
+  (eww "example.com")
+  (sit-for 1)
+  (should (string-match-p
+           (format "<a href='.*example.com.*'>Example Domain</a>")
+           (create-link-make-format 'create-link-format-html)))
+  (should (string-match-p
+           (format "\\[Example Domain\\]\(http://example.com/\)")
+           (create-link-make-format 'create-link-format-markdown)))
+  (should (string-match-p
+           (format "\\[\\[http://example.com/\\]\\[Example Domain\\]\\]")
+           (create-link-make-format 'create-link-format-org)))
+  (should (string-match-p
+           (format "[[http://example.com/|Example Domain]]")
+           (create-link-make-format 'create-link-format-doku-wiki)))
+  (should (string-match-p
+           (format "\\[http://example.com/ Example Domain\\]")
+           (create-link-make-format 'create-link-format-media-wiki)))
+  (should (string-match-p
+           (format "[http://example.com/ Example Domain]")
+           (create-link-make-format 'create-link-format-latex))))
 
 (ert-deftest create-link-make-format-region-test ()
   "If use region, fill title with region."
