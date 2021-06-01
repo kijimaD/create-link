@@ -146,32 +146,32 @@ Group 2 matches the title.")
   "Return t if URL is relative url."
   (not (create-link-absolute-linkp url)))
 
-(defun create-link-html-rule (dict)
+(defun create-link-format-html-rule (dict)
   "HTML specific rule (Unimplemented).
 DICT is alist with url and title."
   dict)
 
-(defun create-link-markdown-rule (dict)
+(defun create-link-format-markdown-rule (dict)
   "Markdown specific rule (Unimplemented).
 DICT is alist with url and title."
   dict)
 
-(defun create-link-org-rule (dict)
+(defun create-link-format-org-rule (dict)
   "Org specific rule (Unimplemented).
 DICT is alist with url and title."
   dict)
 
-(defun create-link-doku-wiki-rule (dict)
+(defun create-link-format-doku-wiki-rule (dict)
   "DokuWiki specific rule (Unimplemented).
 DICT is alist with url and title."
   dict)
 
-(defun create-link-media-wiki-rule (dict)
+(defun create-link-format-media-wiki-rule (dict)
   "MediaWiki specific rule (Unimplemented).
 DICT is alist with url and title."
   dict)
 
-(defun create-link-latex-rule (dict)
+(defun create-link-format-latex-rule (dict)
   "LaTeX specific rule.
 DICT is alist with url and title."
   (cond ((create-link-relative-linkp (cdr (assoc 'url dict)))
@@ -214,10 +214,10 @@ If point is on URL, fill title with scraped one."
 
 (defun create-link-get-from-buffer ()
   "Get keyword information on each buffer."
-  (cond ((string-match-p "eww" (buffer-name))
+  (cond ((eq major-mode 'eww-mode)
          `((title . ,(plist-get eww-data :title))
            (url . ,(eww-current-url))))
-        ((string-match-p "w3m" (buffer-name))
+        ((eq major-mode 'w3m-mode)
          `((title . ,(w3m-current-title))
            (url . ,w3m-current-url)))
         ((buffer-file-name)
@@ -238,19 +238,8 @@ If point is on URL, fill title with scraped one."
     title))
 
 (defun create-link-format-rule (format)
-  "Return rule function corresponding to FORMAT."
-  (cond ((eq format 'create-link-format-html)
-         'create-link-html-rule)
-        ((eq format 'create-link-format-markdown)
-         'create-link-markdown-rule)
-        ((eq format 'create-link-format-org)
-         'create-link-org-rule)
-        ((eq format 'create-link-format-doku-wiki)
-         'create-link-doku-wiki-rule)
-        ((eq format 'create-link-format-media-wiki)
-         'create-link-media-wiki-rule)
-        ((eq format 'create-link-format-latex)
-         'create-link-latex-rule)))
+  "Get the symbol for an format rule function for a FORMAT."
+  (intern (concat (symbol-name format) "-rule")))
 
 (defun create-link-exec-replace (dict format)
   "Fill FORMAT string with DICT elements."
