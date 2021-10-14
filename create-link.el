@@ -39,6 +39,10 @@
 
 (defvar w3m-current-url)
 (declare-function w3m-current-title "ext:w3m-util")
+(declare-function forge-current-issue "ext:forge-issue")
+(declare-function forge-current-pullreq "ext:forge-pullreq")
+(declare-function forge-get-url "ext:forge-repo")
+(eval-when-compile (cl-pushnew 'title eieio--known-slot-names))
 
 (defgroup create-link nil
   "Generate a formatted current page link."
@@ -220,6 +224,12 @@ If point is on URL, fill title with scraped one."
         ((eq major-mode 'w3m-mode)
          `((title . ,(w3m-current-title))
            (url . ,w3m-current-url)))
+        ((and (eq major-mode 'magit-status-mode) (forge-current-issue))
+         `((url . ,(forge-get-url (forge-current-issue)))
+           (title . ,(concat (oref (forge-current-issue) title)))))
+        ((and (eq major-mode 'magit-status-mode) (forge-current-pullreq))
+         `((url . ,(forge-get-url (forge-current-pullreq)))
+           (title . ,(concat (oref (forge-current-pullreq) title)))))
         ((buffer-file-name)
          `((title . ,(buffer-name))
            (url . ,(buffer-file-name))))
