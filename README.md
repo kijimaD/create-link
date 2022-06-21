@@ -39,7 +39,6 @@ I want to support more formats, please send us your PR! [This PR](https://github
 - On URL: Use scraping title
 - Specific buffer
   - eww
-  - w3m
   - File (Make format link with buffer and file path. Thanks [sergiruiztrepat](https://github.com/kijimaD/create-link/pull/7#issue-640817593))
 
 ## 🔧Customize

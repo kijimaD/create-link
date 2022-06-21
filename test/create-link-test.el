@@ -3,7 +3,6 @@
 (require 'create-link)
 (require 'ert)
 (require 'eww)
-(require 'w3m)
 (require 'cl-lib)
 
 ;;; Code:
@@ -15,14 +14,6 @@
   "Eww buffer."
   ;; eww
   (eww "example.com")
-  (sit-for 1)
-  (should (string-match-p
-           (format "<a href='.*example.com.*'>Example Domain</a>")
-           (create-link-make-format))))
-
-(ert-deftest create-link-make-format-w3m-test ()
-  "W3m buffer."
-  (w3m-goto-url "example.com")
   (sit-for 1)
   (should (string-match-p
            (format "<a href='.*example.com.*'>Example Domain</a>")

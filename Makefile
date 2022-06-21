@@ -1,5 +1,4 @@
 package-install:
-	sudo apt-get install w3m
 	git clone https://github.com/cask/cask ~/.cask
 	PATH="$HOME/.cask/bin:$PATH"
 	~/.cask/bin/cask install
