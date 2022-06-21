@@ -6,6 +6,8 @@
 Smart format link generator package for Emacs.
 This package adds two smart link generate functions, `(create-link)` and `(create-link-manual)`
 
+Install: `M-x package-install create-link`
+
 e.g. Put cursor on URL and `M-x create-link` to get format link with title filling with scraped one.
 - `http://example.com` → `<a href="http://example.com/">Example Domain</a>`
 
